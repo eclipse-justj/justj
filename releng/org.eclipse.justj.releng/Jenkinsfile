@@ -1,0 +1,283 @@
+// Uses Declarative syntax to run commands inside a container.
+pipeline {
+  agent { label 'migration' }
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '10'))
+    disableConcurrentBuilds()
+  }
+
+  tools {
+    maven 'apache-maven-latest'
+    jdk 'oracle-jdk8-latest'
+  }
+
+  environment {
+    JUSTJ_BUILD_TIME_STAMP = sh(returnStdout: true, script: 'date +%Y%m%d_%H%M').trim()
+    PUBLISH_LOCATION_PREFIX = 'sandbox/jres'
+    JUSTJ_URL = 'https://download.eclipse.org/justj'
+    JUSTJ_STORAGE_LOCATION = '/home/data/httpd/download.eclipse.org/justj'
+  }
+
+  parameters {
+    string(
+      name: 'JUSTJ_MANIFEST_URL',
+      defaultValue: 'https://download.eclipse.org/justj/sandbox/jres/14/downloads/latest/justj.manifest',
+      description: '''
+        Reuse an existing build of the JREs rather than building new ones.
+        In general, copy a justj.manifest link from an existing <a href="https://download.eclipse.org/justj/sandbox/jres/" target="jres">jres/${java.version}/downloads/latest/justj.manifest</a>.
+        The JDK URLs specified below will be ignored in this case.
+        <br/>
+        <b>To build new JREs, clear this parameter field!<b>
+        <b>To do a release build, ensure that this field specifies the ${java.version} to be released.<b>
+        ''')
+
+    text(
+      name: 'JDK_URLS_WINDOWS',
+      defaultValue: 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_windows-x64_bin.zip',
+      description: 'One or more URLs to a Windows zip of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+
+    text(
+      name: 'JDK_URLS_MACOS',
+      defaultValue: 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_osx-x64_bin.tar.gz',
+      description: 'One or more URLs to a MacOS tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+
+    text(
+      name: 'JDK_URLS_LINUX',
+      defaultValue: 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz',
+      description: 'One or more URLs to a Linux tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+
+    choice(
+      name: 'BUILD_TYPE',
+      choices: ['nightly', 'milestone', 'release'],
+      description: '''
+        The type of build to produce.
+        A release build will not do a new build but rather will promote the most recent milestone build.
+        None of the values specified above are therefore relevant in this case, <b>except that the Java version of the JUSTJ_MANIFEST_URL determines which update site will be released</b>.
+        ''')
+
+    booleanParam(
+      name: 'PROMOTE',
+      defaultValue: false,
+      description: 'Whether to promote the p2 repository to the download server.'
+    )
+  }
+
+  stages {
+    stage('Setup Environment') {
+      steps {
+        sh '''
+        echo 'Setting up environment...'
+        ls -R releng
+        chmod +x releng/org.eclipse.justj.releng/*.sh
+        '''
+        stash includes: 'releng/org.eclipse.justj.releng/**', name: 'releng-stash'
+        script {
+          env.JUSTJ_MANIFEST_URL = params.JUSTJ_MANIFEST_URL
+          env.JDK_URLS_WINDOWS = params.JDK_URLS_WINDOWS
+          env.JDK_URLS_MACOS = params.JDK_URLS_MACOS
+          env.JDK_URLS_LINUX = params.JDK_URLS_LINUX
+          env.BUILD_TYPE = params.BUILD_TYPE
+          env.PROMOTE = params.PROMOTE
+          if (params.JUSTJ_MANIFEST_URL != '') {
+            env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(basename $(dirname $(dirname $(dirname $JUSTJ_MANIFEST_URL))))').trim()
+            env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
+          }
+        }
+      }
+    }
+
+    stage('Build JREs') {
+      when {
+        environment name: 'JUSTJ_MANIFEST_URL', value: ''
+        not {environment name: 'BUILD_TYPE', value: 'release' }
+      }
+
+      parallel {
+
+        stage('Build Linux JRES') {
+          when {
+            not { environment name: 'JDK_URLS_LINUX', value: '' }
+          }
+          steps {
+            sh '''
+            releng/org.eclipse.justj.releng/build-jre.sh
+            '''
+          }
+        }
+
+        stage('Build Windows JREs') {
+          agent {
+            label 'windows'
+          }
+
+          when {
+            beforeAgent true
+            not { environment name: 'JDK_URLS_WINDOWS', value: '' }
+          }
+
+          options { skipDefaultCheckout true }
+
+          steps {
+            cleanWs()
+            unstash 'releng-stash'
+            bat '''
+              bash -ex releng/org.eclipse.justj.releng/build-jre.sh
+              '''
+            stash includes: '*org.eclipse.justj.*.tar.gz', name: 'win-stash'
+          }
+        }
+
+        stage('Build MacOS JREs') {
+          agent {
+            label 'macos'
+          }
+
+          when {
+            beforeAgent true
+            not { environment name: 'JDK_URLS_MACOS', value: '' }
+          }
+
+          options { skipDefaultCheckout true }
+
+          steps {
+            cleanWs()
+            unstash 'releng-stash'
+            sh '''
+            releng/org.eclipse.justj.releng/build-jre.sh
+            '''
+            stash includes: 'org.eclipse.justj.*.tar.gz', name: 'mac-stash'
+          }
+        }
+      }
+    }
+
+    stage('Compose JREs') {
+      when {
+        environment name: 'JUSTJ_MANIFEST_URL', value: ''
+        not {environment name: 'BUILD_TYPE', value: 'release' }
+      }
+
+      steps {
+        script {
+          if (env.JDK_URLS_MACOS != '') {
+            unstash 'mac-stash'
+          }
+    
+          if (env.JDK_URLS_WINDOWS != '') {
+            unstash 'win-stash'
+          }
+
+          // Look for the java.version property in each JRE's properties file, extract out just the major version, and those down to unique values.
+          env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(for i in org.eclipse.justj.*.tar.gz; do tar -xOzf $i org.eclipse.justj.properties | grep "java.version=" | sed "s/^java.version=//g; s/[^0-9].*$//g"; done | sort -u)').trim()
+          env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
+          env.JUSTJ_JRE_PUBLISH_LOCATION = "${env.JUSTJ_PUBLISH_LOCATION}/downloads/${env.JUSTJ_BUILD_TIME_STAMP}"
+        }
+
+        sh ''' 
+          # Check that there is only one major version present.
+          echo "JAVA_MAJOR_VERSION='$JAVA_MAJOR_VERSION'"
+          echo "JUSTJ_PUBLISH_LOCATION='$JUSTJ_PUBLISH_LOCATION'"
+          echo "JUSTJ_JRE_PUBLISH_LOCATION='$JUSTJ_JRE_PUBLISH_LOCATION'"
+          if [[ $(echo $JAVA_MAJOR_VERSION | wc -w) == 1 ]]; then
+            echo "One Java major version."
+          else
+            echo "Inconsistent Java major versions."
+            exit 1
+          fi
+          ''' 
+        sh 'ls org.eclipse.justj.*.tar.gz > justj.manifest'
+        dir('releng/org.eclipse.justj.releng/index') {
+          sh '''
+            mvn --no-transfer-progress -Djustj.manifest.location=../../../justj.manifest -Djustj.manifest.url=$JUSTJ_URL/$JUSTJ_JRE_PUBLISH_LOCATION/justj.manifest clean verify
+            '''
+        }
+
+        archiveArtifacts 'org.eclipse.justj.*.tar.gz'
+        archiveArtifacts 'justj.manifest'
+        archiveArtifacts 'index.html'
+
+        sshagent(['projects-storage.eclipse.org-bot-ssh']) {
+          sh '''
+            ssh genie.justj@projects-storage.eclipse.org "
+            mkdir -p $JUSTJ_STORAGE_LOCATION/$JUSTJ_JRE_PUBLISH_LOCATION
+            "
+
+            scp index.html justj.manifest org.eclipse.justj.*.tar.gz genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/$JUSTJ_JRE_PUBLISH_LOCATION
+
+            ssh genie.justj@projects-storage.eclipse.org "
+              mkdir -p $JUSTJ_STORAGE_LOCATION/$JUSTJ_PUBLISH_LOCATION/downloads/latest
+              cd $JUSTJ_STORAGE_LOCATION/$JUSTJ_PUBLISH_LOCATION/downloads/latest
+              ls ../$JUSTJ_BUILD_TIME_STAMP/org.eclipse.justj.*.tar.gz > justj.manifest
+              cp ../$JUSTJ_BUILD_TIME_STAMP/index.html .
+              "
+            '''
+        }
+      }
+    }
+
+    // Even if we are doing a release build, we must generate the infastructure needed to publish the release.
+    //
+    stage('Reconcile/Generate JRE Model') {
+      steps {
+        dir('model/org.eclipse.justj.model') {
+          sh '''
+            # Use the one we built just now or the one that was specified in the parameters.
+            if [[ "$JUSTJ_MANIFEST_URL" == "" ]]; then
+              sed 's%source=".*[.]manifest"%source="'$JUSTJ_URL/$JUSTJ_JRE_PUBLISH_LOCATION'/justj.manifest"%g' < justj.jregen > justj-transformed.jregen
+            else
+              sed 's%source=".*[.]manifest"%source="'$JUSTJ_MANIFEST_URL'"%g' < justj.jregen > justj-transformed.jregen
+            fi
+            cat justj-transformed.jregen
+            mv justj-transformed.jregen justj.jregen
+            mvn --no-transfer-progress clean verify
+          '''
+          archiveArtifacts '*-gen/'
+        }
+      }
+    }
+
+    stage('Build JRE p2 Repository') {
+      steps {
+        sshagent(['projects-storage.eclipse.org-bot-ssh']) {
+          dir('model/org.eclipse.justj.model/jre-gen') {
+            sh '''
+              if [[ $PROMOTE == false ]]; then
+                promotion_argument='-Dorg.eclipse.justj.p2.manager.args='
+              fi
+              if [[ $BUILD_TYPE == 'release' ]]; then
+                extra_argument='-DMAVEN_BUILD=false'
+              fi
+              mvn --no-transfer-progress $promotion_argument $extra_argument -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
+              '''
+            script {
+              if (params.BUILD_TYPE != 'release') {
+                dir('releng/org.eclipse.justj.site/target') {
+                  archiveArtifacts 'repository/,org.eclipse.justj.site*.zip'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    failure {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[JustJ CI] Build Failure ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br/>Build Number: ${env.BUILD_NUMBER}<br/>Build URL: ${env.BUILD_URL}<br/>Console: ${env.BUILD_URL}/console"
+    }
+    fixed {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[JustJ CI] Back to normal ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br/>Build Number: ${env.BUILD_NUMBER}<br/>Build URL: ${env.BUILD_URL}<br/>Console: ${env.BUILD_URL}/console"
+    }
+    cleanup {
+      deleteDir()
+    }
+  }
+}

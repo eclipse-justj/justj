@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2020 Eclipse contributors and others.
+
+This program and the accompanying materials
+are made available under the terms of the Eclipse Public License 2.0
+which accompanies this distribution, and is available at
+https://www.eclipse.org/legal/epl-2.0/
+
+SPDX-License-Identifier: EPL-2.0
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.eclipse.justj</groupId>
+  <artifactId>org.eclipse.justj.index</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <tycho-version>1.7.0</tycho-version>
+    <jarsigner-version>1.1.7</jarsigner-version>
+    <justj.tools.repo>https://download.eclipse.org/justj/tools/updates/nightly/latest</justj.tools.repo>
+    <eclipse.repo>https://download.eclipse.org/releases/2020-06</eclipse.repo>
+    <justj.manifest.location>justj.manifest</justj.manifest.location>
+    <justj.manifest.url>justj.manifest</justj.manifest.url>
+    <os-jvm-flags/>
+  </properties>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>eclipse-maven-releases</id>
+      <url>https://repo.eclipse.org/content/repositories/releases</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>eclipse-cbi-releases</id>
+      <url>https://repo.eclipse.org/content/repositories/cbi-releases</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <extensions>true</extensions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho.extras</groupId>
+        <artifactId>tycho-eclipserun-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <executionEnvironment>JavaSE-1.8</executionEnvironment>
+          <dependencies>
+            <dependency>
+              <artifactId>org.eclipse.justj.codegen</artifactId>
+              <type>eclipse-plugin</type>
+            </dependency>
+          </dependencies>
+          <repositories>
+            <repository>
+              <id>eclipse.repo</id>
+              <layout>p2</layout>
+              <url>${eclipse.repo}</url>
+            </repository>
+            <repository>
+              <id>justj.tools.repo</id>
+              <layout>p2</layout>
+              <url>${justj.tools.repo}</url>
+            </repository>
+          </repositories>
+        </configuration>
+        <executions>
+          <execution>
+            <id>index</id>
+            <goals>
+              <goal>eclipse-run</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <argLine></argLine>
+              <appArgLine>-consoleLog -application org.eclipse.justj.codegen.jre.indexer -nosplash ${justj.manifest.location} ${justj.manifest.url}</appArgLine>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>tycho-maven-plugin</artifactId>
+          <version>${tycho-version}</version>
+          <extensions>true</extensions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

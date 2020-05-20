@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Model
+    xmlns:model="http://www.eclipse.org/just/2020/Model"
+    copyrightHolder="Eclipse contributors and others"
+    copyrightYear="2020"
+    name="org.eclipse.justj"
+    label="JustJ"
+    provider="Eclipse JustJ"
+    providerImageName="justj32.png"
+    target="jre-gen"
+    source="https://download.eclipse.org/justj/sandbox/jres/14/downloads/latest/justj.manifest"
+    localCache="local-cache">
+  <touchpoints
+      phase="uninstall">
+    <instruction>org.eclipse.equinox.p2.touchpoint.eclipse.setJvm(jvm:null)</instruction>
+  </touchpoints>
+  <copyrightText>
+    Copyright (c) ${copyrightYear} ${copyrightHolder}.
+
+    This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License 2.0
+    which accompanies this distribution, and is available at
+    https://www.eclipse.org/legal/epl-2.0/
+
+    SPDX-License-Identifier: EPL-2.0
+  </copyrightText>
+  <providerImageData>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</providerImageData>
+</model:Model>
