@@ -216,7 +216,7 @@ pipeline {
       }
     }
 
-    // Even if we are doing a release build, we must generate the infastructure needed to publish the release.
+    // Even if we are doing a release build, we must generate the infrastructure needed to publish the release.
     //
     stage('Reconcile/Generate JRE Model') {
       steps {
@@ -232,7 +232,7 @@ pipeline {
             mv justj-transformed.jregen justj.jregen
             mvn --no-transfer-progress clean verify
           '''
-          archiveArtifacts '*-gen/'
+          archiveArtifacts 'justj.jregen,*-gen/'
         }
       }
     }
