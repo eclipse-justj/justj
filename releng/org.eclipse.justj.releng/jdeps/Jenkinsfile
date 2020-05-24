@@ -83,7 +83,7 @@ pipeline {
                     archiveArtifacts '*-deps,index.html,justj.modules'
                   }
                 } else {
-                  dir('plugins') {
+                  dir('jdeps') {
                     archiveArtifacts 'index.html,justj.modules'
                   }
                 }
