@@ -28,10 +28,10 @@ pipeline {
     stage('Download Jars') {
       steps {
         script {
-          if (params.params.REPOSITORY_URL != "" && !params.REPOSITORY_URL.startsWith("https://download.eclipse.org/")) {
+          if (params.REPOSITORY_URL != "" && !params.REPOSITORY_URL.startsWith("https://download.eclipse.org/")) {
             error("Only repositories located at https://download.eclipse.org/ are permitted.")
           } else {
-            if (params.params.REPOSITORY_URL == "") {
+            if (params.REPOSITORY_URL == "") {
               echo "Only rebuilding the index."
             } else {
               env.REPOSITORY_LOCATION = "/home/data/httpd/" + params.REPOSITORY_URL.replace("https:/", "")
@@ -47,7 +47,7 @@ pipeline {
             '''
             sshagent(['projects-storage.eclipse.org-bot-ssh']) {
               script {
-                if (params.params.REPOSITORY_URL != "") {
+                if (params.REPOSITORY_URL != "") {
                   sh '''
                     mkdir plugins
                     rsync -avsh --exclude '*.source_*' "genie.justj@projects-storage.eclipse.org:$REPOSITORY_LOCATION/plugins/*.jar" plugins/
@@ -78,7 +78,7 @@ pipeline {
                 '''
 
               script {
-                if (params.params.REPOSITORY_URL != "") {
+                if (params.REPOSITORY_URL != "") {
                   dir('plugins') {
                     archiveArtifacts '*-deps,index.html,justj.modules'
                   }
