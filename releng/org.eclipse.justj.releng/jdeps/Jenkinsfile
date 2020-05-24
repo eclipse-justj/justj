@@ -32,7 +32,7 @@ pipeline {
             error("Only repositories located at https://download.eclipse.org/ are permitted.")
           } else {
             if (params.params.REPOSITORY_URL == "") {
-              echo "Only rebuilding the index.
+              echo "Only rebuilding the index."
             } else {
               env.REPOSITORY_LOCATION = "/home/data/httpd/" + params.REPOSITORY_URL.replace("https:/", "")
               env.REPOSITORY_REPORT_LOCATION = params.REPOSITORY_URL.replace("https://download.eclipse.org/", "")
