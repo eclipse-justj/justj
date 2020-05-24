@@ -28,12 +28,16 @@ pipeline {
     stage('Download Jars') {
       steps {
         script {
-          if (!params.REPOSITORY_URL.startsWith("https://download.eclipse.org/")) {
+          if (params.params.REPOSITORY_URL != "" && !params.REPOSITORY_URL.startsWith("https://download.eclipse.org/")) {
             error("Only repositories located at https://download.eclipse.org/ are permitted.")
           } else {
-            env.REPOSITORY_LOCATION = "/home/data/httpd/" + params.REPOSITORY_URL.replace("https:/", "")
-            env.REPOSITORY_REPORT_LOCATION = params.REPOSITORY_URL.replace("https://download.eclipse.org/", "")
-            echo "Using repository ${env.REPOSITORY_LOCATION}"
+            if (params.params.REPOSITORY_URL == "") {
+              echo "Only rebuilding the index.
+            } else {
+              env.REPOSITORY_LOCATION = "/home/data/httpd/" + params.REPOSITORY_URL.replace("https:/", "")
+              env.REPOSITORY_REPORT_LOCATION = params.REPOSITORY_URL.replace("https://download.eclipse.org/", "")
+              echo "Using repository ${env.REPOSITORY_LOCATION}"
+            }
             sh '''
               mkdir -p org/eclipse/justj/codegen/templates/jdeps/
               cd org/eclipse/justj/codegen/templates/jdeps/
@@ -42,35 +46,47 @@ pipeline {
               javac org/eclipse/justj/codegen/templates/jdeps/JdepsIndex.java
             '''
             sshagent(['projects-storage.eclipse.org-bot-ssh']) {
-              sh '''
-                mkdir plugins
-                rsync -avsh --exclude '*.source_*' "genie.justj@projects-storage.eclipse.org:$REPOSITORY_LOCATION/plugins/*.jar" plugins/
-                cd plugins
-                for plugin in *.jar; do
-                  jdeps --ignore-missing-deps --multi-release 14 --print-module-deps $plugin > $plugin-out-deps 2> $plugin-error-deps || true
-                  if [[ $(wc -w < $plugin-error-deps) == 0 ]]; then
-                    rm $plugin-error-deps
-                  else
-                    cat $plugin-error-deps
-                  fi
-                  cat $plugin-out-deps
-                done
-                java -cp .. org.eclipse.justj.codegen.templates.jdeps.JdepsIndex . $REPOSITORY_URL
-                ssh genie.justj@projects-storage.eclipse.org "mkdir -p $JUSTJ_STORAGE_LOCATION/jdeps/$REPOSITORY_REPORT_LOCATION"
-                scp index.html justj.modules genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps/$REPOSITORY_REPORT_LOCATION
-                '''
+              script {
+                if (params.params.REPOSITORY_URL != "") {
+                  sh '''
+                    mkdir plugins
+                    rsync -avsh --exclude '*.source_*' "genie.justj@projects-storage.eclipse.org:$REPOSITORY_LOCATION/plugins/*.jar" plugins/
+                    cd plugins
+                    for plugin in *.jar; do
+                      jdeps --ignore-missing-deps --multi-release 14 --print-module-deps $plugin > $plugin-out-deps 2> $plugin-error-deps || true
+                      if [[ $(wc -w < $plugin-error-deps) == 0 ]]; then
+                        rm $plugin-error-deps
+                      else
+                        cat $plugin-error-deps
+                      fi
+                      cat $plugin-out-deps
+                    done
+                    java -cp .. org.eclipse.justj.codegen.templates.jdeps.JdepsIndex . $REPOSITORY_URL
+                    ssh genie.justj@projects-storage.eclipse.org "mkdir -p $JUSTJ_STORAGE_LOCATION/jdeps/$REPOSITORY_REPORT_LOCATION"
+                    scp index.html justj.modules genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps/$REPOSITORY_REPORT_LOCATION
+                    '''
+                }
+              }
 
               // Build the index.
               sh '''
                 mkdir jdeps
                 cd jdeps
-                rsync -avsh "genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps" .
+                rsync -avsh "genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps/" .
                 java -cp .. org.eclipse.justj.codegen.templates.jdeps.JdepsIndex -index .
                 rsync -avsh . "genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps"
                 '''
 
-              dir('plugins') {
-                archiveArtifacts '*-deps,index.html,justj.modules'
+              script {
+                if (params.params.REPOSITORY_URL != "") {
+                  dir('plugins') {
+                    archiveArtifacts '*-deps,index.html,justj.modules'
+                  }
+                } else {
+                  dir('plugins') {
+                    archiveArtifacts 'index.html,justj.modules'
+                  }
+                }
               }
             }
           }
