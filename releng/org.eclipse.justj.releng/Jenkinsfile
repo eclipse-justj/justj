@@ -20,7 +20,6 @@ pipeline {
 
   parameters {
     string(
-    string(
       name: 'PUBLISH_LOCATION_PREFIX',
       defaultValue: 'sandbox/jres',
       description: '''
@@ -28,6 +27,8 @@ pipeline {
         <br/>
         Generally just use the default unless you plan to delete the results after the promotion.
         ''')
+
+    string(
       name: 'JUSTJ_MANIFEST_URL',
       defaultValue: 'https://download.eclipse.org/justj/sandbox/jres/14/downloads/latest/justj.manifest',
       description: '''
