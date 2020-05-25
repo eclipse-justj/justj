@@ -14,13 +14,20 @@ pipeline {
 
   environment {
     JUSTJ_BUILD_TIME_STAMP = sh(returnStdout: true, script: 'date +%Y%m%d_%H%M').trim()
-    PUBLISH_LOCATION_PREFIX = 'sandbox/jres'
     JUSTJ_URL = 'https://download.eclipse.org/justj'
     JUSTJ_STORAGE_LOCATION = '/home/data/httpd/download.eclipse.org/justj'
   }
 
   parameters {
     string(
+    string(
+      name: 'PUBLISH_LOCATION_PREFIX',
+      defaultValue: 'sandbox/jres',
+      description: '''
+        The location under <a href="https://download.eclipse.org/justj/" target="jres">https://download.eclipse.org/justj/$PUBLISH_LOCATION_PREFIX/${java.version}/downloads/</a> where to publish the results.
+        <br/>
+        Generally just use the default unless you plan to delete the results after the promotion.
+        ''')
       name: 'JUSTJ_MANIFEST_URL',
       defaultValue: 'https://download.eclipse.org/justj/sandbox/jres/14/downloads/latest/justj.manifest',
       description: '''
@@ -73,6 +80,7 @@ pipeline {
         '''
         stash includes: 'releng/org.eclipse.justj.releng/**', name: 'releng-stash'
         script {
+          env.PUBLISH_LOCATION_PREFIX = params.PUBLISH_LOCATION_PREFIX
           env.JUSTJ_MANIFEST_URL = params.JUSTJ_MANIFEST_URL
           env.JDK_URLS_WINDOWS = params.JDK_URLS_WINDOWS
           env.JDK_URLS_MACOS = params.JDK_URLS_MACOS
