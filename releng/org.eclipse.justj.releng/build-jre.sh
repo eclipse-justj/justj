@@ -170,7 +170,7 @@ if grep "^java.vendor.version=" all.properties | grep -q "AdoptOpenJDK"; then
     vendor_prefix="adoptopenjdk.hotspot"
   fi
 else
-  vendor_url="https://openjdk.java.net/"
+  vendor_url="https://jdk.java.net/"
   vendor_label="OpenJDK Hotspot"
   vendor_prefix="openjdk.hotspot"
 fi
