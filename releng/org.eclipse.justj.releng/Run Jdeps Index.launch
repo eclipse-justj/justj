@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/org.eclipse.justj.codegen/src/org/eclipse/justj/codegen/templates/jdeps/JdepsIndex.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.justj.codegen.templates.jdeps.JdepsIndex"/>
+<stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="org.eclipse.justj.codegen"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="${project_loc:org.eclipse.justj.releng}/target&#13;&#10;https://download.eclipse.org/justj/tools/updates/nightly/N202005200955&#13;&#10;https://ci.eclipse.org/justj/job/build-jdeps/lastSuccessfulBuild/artifact/*zip*/archive.zip"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.justj.codegen"/>
+</launchConfiguration>
