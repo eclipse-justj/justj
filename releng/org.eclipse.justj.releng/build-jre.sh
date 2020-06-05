@@ -41,7 +41,7 @@ else
   jdk_relative_bin_folder="bin"
   jdk_relative_vm_arg="bin"
   jre_relative_vm_arg="bin"
-  strip_debug="--strip-java-debug-attributes"
+  strip_debug="--strip-debug"
   eclipse_root="eclipse"
   eclipse_executable="eclipse/eclipse"
   if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
