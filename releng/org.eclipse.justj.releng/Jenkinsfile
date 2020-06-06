@@ -36,9 +36,9 @@ def defaultURLsLinux = jdkJavaNetURLsLinux14
 // Java 15 early access definitions
 //
 def java15Prefix = 'sandbox-test/jres';
-def jdkJavaNetURLsWindows15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_windows-x64_bin.zip'
-def jdkJavaNetURLsMac15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_osx-x64_bin.tar.gz'
-def jdkJavaNetURLsLinux15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_linux-x64_bin.tar.gz'
+def jdkJavaNetURLsWindows15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea%2B26_windows-x64_bin.zip'
+def jdkJavaNetURLsMac15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea%2B26_osx-x64_bin.tar.gz'
+def jdkJavaNetURLsLinux15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea%2B26_linux-x64_bin.tar.gz'
 
 def java15Parambuild = "PUBLISH_LOCATION_PREFIX=${java15Prefix}&\
 BUILD_DESCRIPTION=Build+jdk.java.net+Java+15 Early Access&\
