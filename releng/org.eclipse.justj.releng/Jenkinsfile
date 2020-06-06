@@ -1,4 +1,48 @@
-// Uses Declarative syntax to run commands inside a container.
+// Define global variables
+
+// When the parameters change, this should be increased so that the build does nothing other than update the parameters used for the next build.
+def pipelineVersion = '1'
+
+def justjURL = 'https://download.eclipse.org/justj'
+
+def java11Prefix = 'sandbox-test/jres';
+def jdkJavaNetURLsWindows11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip'
+def jdkJavaNetURLsMac11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_osx-x64_bin.tar.gz'
+def jdkJavaNetURLsLinux11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz'
+
+def java11Parambuild = "PUBLISH_LOCATION_PREFIX=${java11Prefix}&\
+BUILD_DESCRIPTION=Build+jdk.java.net+Java+11&\
+JUSTJ_MANIFEST_URL=${justjURL}/${java11Prefix}/11/downloads/latest/justj.manifest&\
+JDK_URLS_WINDOWS=${jdkJavaNetURLsWindows11}&\
+JDK_URLS_MACOS=${jdkJavaNetURLsMac11}&\
+JDK_URLS_LINUX=${jdkJavaNetURLsLinux11}&\
+BUILD_TYPE=nightly&\
+PROMOTE=true"
+
+def java14Prefix = 'sandbox/jres'
+def jdkJavaNetURLsWindows14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_windows-x64_bin.zip'
+def jdkJavaNetURLsMac14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_osx-x64_bin.tar.gz'
+def jdkJavaNetURLsLinux14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz'
+
+def defaultPrefix = java14Prefix
+def defaultURLsWindows = jdkJavaNetURLsWindows14
+def defaultURLsMac = jdkJavaNetURLsMac14
+def defaultURLsLinux = jdkJavaNetURLsLinux14
+
+def buttonStyle = 'style="\
+margin-left: 2em; \
+margin-top: 1ex; \
+margin-bottom: 1ex; \
+font-weight: bold; \
+border: 1px solid Chocolate;  \
+background-color: DarkOrange; \
+color: white; \
+padding: 0.25ex 0.25em; \
+text-align: center; \
+text-decoration: none; \
+display: inline-block;"'
+
+// Use declarative syntax to run commands inside a Groovy sand-box container.
 pipeline {
   agent { label 'migration' }
 
@@ -14,45 +58,62 @@ pipeline {
 
   environment {
     JUSTJ_BUILD_TIME_STAMP = sh(returnStdout: true, script: 'date +%Y%m%d_%H%M').trim()
-    JUSTJ_URL = 'https://download.eclipse.org/justj'
+    JUSTJ_URL = "${justjURL}"
     JUSTJ_STORAGE_LOCATION = '/home/data/httpd/download.eclipse.org/justj'
   }
 
   parameters {
     string(
-      name: 'PUBLISH_LOCATION_PREFIX',
-      defaultValue: 'sandbox/jres',
+      name: 'PIPELINE_VERSION',
+      // defaultValue: "${pipelineVersion}",
+      defaultValue: "0",
       description: '''
-        The location under <a href="https://download.eclipse.org/justj/" target="jres">https://download.eclipse.org/justj/$PUBLISH_LOCATION_PREFIX/${java.version}/downloads/</a> where to publish the results.
-        <br/>
-        Generally just use the default unless you plan to delete the results after the promotion.
+        If the parameter definitions have changed, this version will be out-dated.
+        The script will run but will do nothing other than updating the parameter definitions of the job as a side-effect.
         ''')
 
     string(
+      name: 'BUILD_DESCRIPTION',
+      defaultValue: 'Build jdk.java.net Java 14',
+      description: """
+        Use one of the following links to reconfigure the other parameters below.<br/>
+        <a href="parambuild?${java11Parambuild}" ${buttonStyle}>Java 11</a>
+        """)
+
+    string(
+      name: 'PUBLISH_LOCATION_PREFIX',
+      defaultValue: "${defaultPrefix}",
+      description: """
+        The location under <a href="${justjURL}/" target="jres">${justjURL}/\${PUBLISH_LOCATION_PREFIX}/\${java.version}/downloads/</a> where to publish the results.
+        <br/>
+        Generally just use the default unless you plan to delete the results after the promotion.
+        """)
+
+    string(
       name: 'JUSTJ_MANIFEST_URL',
-      defaultValue: 'https://download.eclipse.org/justj/sandbox/jres/14/downloads/latest/justj.manifest',
-      description: '''
+      defaultValue: "${justjURL}/{$defaultPrefix}/14/downloads/latest/justj.manifest",
+      description: """
         Reuse an existing build of the JREs rather than building new ones.
-        In general, copy a justj.manifest link from an existing <a href="https://download.eclipse.org/justj/sandbox/jres/" target="jres">jres/${java.version}/downloads/latest/justj.manifest</a>.
+        In general, copy a justj.manifest link from an existing <a href="${justjURL}/${defaultPrefix}" target="jres">jres/\${java.version}/downloads/latest/justj.manifest</a>.
         The JDK URLs specified below will be ignored in this case.
         <br/>
         <b>To build new JREs, clear this parameter field!<b>
-        <b>To do a release build, ensure that this field specifies the ${java.version} to be released.<b>
-        ''')
+        <b>To do a release build, ensure that this field specifies the \${java.version} to be released.<b>
+        """)
 
     text(
       name: 'JDK_URLS_WINDOWS',
-      defaultValue: 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_windows-x64_bin.zip',
+      defaultValue: "${defaultURLsWindows}",
       description: 'One or more URLs to a Windows zip of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
       name: 'JDK_URLS_MACOS',
-      defaultValue: 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_osx-x64_bin.tar.gz',
+      defaultValue: "${defaultURLsMac}",
       description: 'One or more URLs to a MacOS tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
       name: 'JDK_URLS_LINUX',
-      defaultValue: 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz',
+      defaultValue: "${defaultURLsLinux}",
       description: 'One or more URLs to a Linux tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     choice(
@@ -73,6 +134,10 @@ pipeline {
 
   stages {
     stage('Setup Environment') {
+      when {
+        environment name: 'PIPELINE_VERSION', value: pipelineVersion
+        not { environment name: 'BUILD_NUMBER', value: '1' }
+      }
       steps {
         sh '''
         echo 'Setting up environment...'
@@ -81,6 +146,7 @@ pipeline {
         '''
         stash includes: 'releng/org.eclipse.justj.releng/**', name: 'releng-stash'
         script {
+          env.PIPELINE_VERSION = params.PIPELINE_VERSION
           env.PUBLISH_LOCATION_PREFIX = params.PUBLISH_LOCATION_PREFIX
           env.JUSTJ_MANIFEST_URL = params.JUSTJ_MANIFEST_URL
           env.JDK_URLS_WINDOWS = params.JDK_URLS_WINDOWS
@@ -100,6 +166,8 @@ pipeline {
       when {
         environment name: 'JUSTJ_MANIFEST_URL', value: ''
         not {environment name: 'BUILD_TYPE', value: 'release' }
+        environment name: 'PIPELINE_VERSION', value: pipelineVersion
+        not { environment name: 'BUILD_NUMBER', value: '1' }
       }
 
       parallel {
@@ -165,6 +233,8 @@ pipeline {
       when {
         environment name: 'JUSTJ_MANIFEST_URL', value: ''
         not {environment name: 'BUILD_TYPE', value: 'release' }
+        environment name: 'PIPELINE_VERSION', value: pipelineVersion
+        not { environment name: 'BUILD_NUMBER', value: '1' }
       }
 
       steps {
@@ -177,7 +247,7 @@ pipeline {
             unstash 'win-stash'
           }
 
-          // Look for the java.version property in each JRE's properties file, extract out just the major version, and those down to unique values.
+          // Look for the java.version property in each JRE's properties file, extract out just the major version, and boil those down to unique values.
           env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(for i in org.eclipse.justj.*.tar.gz; do tar -xOzf $i org.eclipse.justj.properties | grep "java.version=" | sed "s/^java.version=//g; s/[^0-9].*$//g"; done | sort -u)').trim()
           env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
           env.JUSTJ_JRE_PUBLISH_LOCATION = "${env.JUSTJ_PUBLISH_LOCATION}/downloads/${env.JUSTJ_BUILD_TIME_STAMP}"
@@ -228,6 +298,10 @@ pipeline {
     // Even if we are doing a release build, we must generate the infrastructure needed to publish the release.
     //
     stage('Reconcile/Generate JRE Model') {
+      when {
+        environment name: 'PIPELINE_VERSION', value: pipelineVersion
+        not { environment name: 'BUILD_NUMBER', value: '1' }
+      }
       steps {
         dir('model/org.eclipse.justj.model') {
           sh '''
@@ -247,6 +321,10 @@ pipeline {
     }
 
     stage('Build JRE p2 Repository') {
+      when {
+        environment name: 'PIPELINE_VERSION', value: pipelineVersion
+        not { environment name: 'BUILD_NUMBER', value: '1' }
+      }
       steps {
         sshagent(['projects-storage.eclipse.org-bot-ssh']) {
           dir('model/org.eclipse.justj.model/jre-gen') {
@@ -257,7 +335,7 @@ pipeline {
               if [[ $BUILD_TYPE == 'release' ]]; then
                 extra_argument='-DMAVEN_BUILD=false'
               fi
-              mvn --no-transfer-progress $promotion_argument $extra_argument -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
+              mvn --no-transfer-progress $promotion_argument $extra_argument -Dorg.eclipse.justj.p2.manager.extra.args="-super $PUBLISH_LOCATION_PREFIX" -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
               '''
             script {
               if (params.BUILD_TYPE != 'release') {
