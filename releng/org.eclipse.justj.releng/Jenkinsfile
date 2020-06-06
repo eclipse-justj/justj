@@ -33,6 +33,16 @@ def defaultURLsWindows = jdkJavaNetURLsWindows14
 def defaultURLsMac = jdkJavaNetURLsMac14
 def defaultURLsLinux = jdkJavaNetURLsLinux14
 
+// Temporarily publish to the test standbox
+def java14Parambuild = "PUBLISH_LOCATION_PREFIX=sandbox-test/jres&\
+BUILD_DESCRIPTION=Build+jdk.java.net+Java+14&\
+JUSTJ_MANIFEST_URL=${justjURL}/${java14Prefix}/14/downloads/latest/justj.manifest&\
+JDK_URLS_WINDOWS=${jdkJavaNetURLsWindows14}&\
+JDK_URLS_MACOS=${jdkJavaNetURLsMac14}&\
+JDK_URLS_LINUX=${jdkJavaNetURLsLinux14}&\
+BUILD_TYPE=nightly&\
+PROMOTE=true"
+
 // Java 15 early access definitions
 //
 def java15Prefix = 'sandbox-test/jres';
@@ -99,6 +109,7 @@ pipeline {
       description: """
         Use one of the following links to reconfigure the other parameters below.<br/>
         <a href="parambuild?${java11Parambuild}" ${buttonStyle}>Java 11</a>
+        <a href="parambuild?${java14Parambuild}" ${buttonStyle}>Java 14 (test)</a>
         <a href="parambuild?${java15Parambuild}" ${buttonStyle}>Java 15+ea</a>
         """)
 
