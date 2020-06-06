@@ -1,10 +1,12 @@
 // Define global variables
 
 // When the parameters change, this should be increased so that the build does nothing other than update the parameters used for the next build.
-def pipelineVersion = '1'
+def pipelineVersion = '2'
 
 def justjURL = 'https://download.eclipse.org/justj'
 
+// Java 11 definitions
+//
 def java11Prefix = 'sandbox-test/jres';
 def jdkJavaNetURLsWindows11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip'
 def jdkJavaNetURLsMac11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_osx-x64_bin.tar.gz'
@@ -19,6 +21,8 @@ JDK_URLS_LINUX=${jdkJavaNetURLsLinux11}&\
 BUILD_TYPE=nightly&\
 PROMOTE=true"
 
+// Java 14 definitions
+//
 def java14Prefix = 'sandbox/jres'
 def jdkJavaNetURLsWindows14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_windows-x64_bin.zip'
 def jdkJavaNetURLsMac14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_osx-x64_bin.tar.gz'
@@ -29,6 +33,24 @@ def defaultURLsWindows = jdkJavaNetURLsWindows14
 def defaultURLsMac = jdkJavaNetURLsMac14
 def defaultURLsLinux = jdkJavaNetURLsLinux14
 
+// Java 15 early access definitions
+//
+def java15Prefix = 'sandbox-test/jres';
+def jdkJavaNetURLsWindows15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_windows-x64_bin.zip'
+def jdkJavaNetURLsMac15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_osx-x64_bin.tar.gz'
+def jdkJavaNetURLsLinux15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_linux-x64_bin.tar.gz'
+
+def java15Parambuild = "PUBLISH_LOCATION_PREFIX=${java15Prefix}&\
+BUILD_DESCRIPTION=Build+jdk.java.net+Java+15 Early Access&\
+JUSTJ_MANIFEST_URL=${justjURL}/${java15Prefix}/15/downloads/latest/justj.manifest&\
+JDK_URLS_WINDOWS=${jdkJavaNetURLsWindows15}&\
+JDK_URLS_MACOS=${jdkJavaNetURLsMac15}&\
+JDK_URLS_LINUX=${jdkJavaNetURLsLinux15}&\
+BUILD_TYPE=nightly&\
+PROMOTE=true"
+
+// Styling links as buttons.
+//
 def buttonStyle = 'style="\
 margin-left: 2em; \
 margin-top: 1ex; \
@@ -77,6 +99,7 @@ pipeline {
       description: """
         Use one of the following links to reconfigure the other parameters below.<br/>
         <a href="parambuild?${java11Parambuild}" ${buttonStyle}>Java 11</a>
+        <a href="parambuild?${java15Parambuild}" ${buttonStyle}>Java 15+ea</a>
         """)
 
     string(
