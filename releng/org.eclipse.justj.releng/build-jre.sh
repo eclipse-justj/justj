@@ -233,9 +233,18 @@ for ((i=0; i<${#jres[@]}; i+=5)); do
   $jdk/$jdk_relative_bin_folder/jlink --add-modules=$modules $jlink_args --output $jre_folder
 
   # Build the -vm arg value.
-  # On Mac it must be absolute.
   jre_vm_arg="$jre_folder/$jre_relative_vm_arg"
-  [[ $os == mac ]] && jre_vm_arg="$PWD/$jre_vm_arg"
+
+  # On Mac it must be absolute.
+  if [[ $os == mac ]]; then
+    jre_vm_arg="$PWD/$jre_vm_arg"
+    # On the older 11 JDK, it was in a different folder.
+    if [[ ! -f $jre_vm_arg ]]; then
+      jre_relative_vm_arg=lib/jli/libjli.dylib
+      jre_vm_arg="$jre_folder/$jre_relative_vm_arg"
+      jre_vm_arg="$PWD/$jre_vm_arg"
+    fi
+  fi
 
   # Capture the interesting system properties.
   $eclipse_executable -application org.eclipse.ant.core.antRunner -nosplash -emacs -vm "$jre_vm_arg"\
