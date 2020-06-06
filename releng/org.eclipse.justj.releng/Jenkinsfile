@@ -124,7 +124,7 @@ pipeline {
 
     string(
       name: 'JUSTJ_MANIFEST_URL',
-      defaultValue: "${justjURL}/{$defaultPrefix}/14/downloads/latest/justj.manifest",
+      defaultValue: "${justjURL}/${defaultPrefix}/14/downloads/latest/justj.manifest",
       description: """
         Reuse an existing build of the JREs rather than building new ones.
         In general, copy a justj.manifest link from an existing <a href="${justjURL}/${defaultPrefix}" target="jres">jres/\${java.version}/downloads/latest/justj.manifest</a>.
