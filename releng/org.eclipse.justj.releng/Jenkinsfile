@@ -1,78 +1,106 @@
 // Define global variables
 
 // When the parameters change, this should be increased so that the build does nothing other than update the parameters used for the next build.
-def pipelineVersion = '2'
+def pipelineVersion = '1'
 
 def justjURL = 'https://download.eclipse.org/justj'
 
-// Java 11 definitions
-//
-def java11Prefix = 'sandbox-test/jres';
-def jdkJavaNetURLsWindows11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip'
-def jdkJavaNetURLsMac11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_osx-x64_bin.tar.gz'
-def jdkJavaNetURLsLinux11 = 'https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz'
+def testPrefix = "sandbox-test/jres"
 
-def java11Parambuild = "PUBLISH_LOCATION_PREFIX=${java11Prefix}&\
-BUILD_DESCRIPTION=Build+jdk.java.net+Java+11&\
-JUSTJ_MANIFEST_URL=${justjURL}/${java11Prefix}/11/downloads/latest/justj.manifest&\
-JDK_URLS_WINDOWS=${jdkJavaNetURLsWindows11}&\
-JDK_URLS_MACOS=${jdkJavaNetURLsMac11}&\
-JDK_URLS_LINUX=${jdkJavaNetURLsLinux11}&\
-BUILD_TYPE=nightly&\
-PROMOTE=true"
+def java11 = [
+  label: 'Java 11 (test)',
+  BUILD_DESCRIPTION: 'Build jdk.java.net Java 11 (-test)',
+  PUBLISH_LOCATION_PREFIX: "${testPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/11/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
+    https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_osx-x64_bin.tar.gz
+    ''',
+  JDK_URLS_LINUX: '''
+    https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
 
-// Java 14 definitions
-//
-def java14Prefix = 'sandbox/jres'
-def jdkJavaNetURLsWindows14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_windows-x64_bin.zip'
-def jdkJavaNetURLsMac14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_osx-x64_bin.tar.gz'
-def jdkJavaNetURLsLinux14 = 'https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz'
+def java14 = [
+  label: 'Java 14 (test)',
+  BUILD_DESCRIPTION: 'Build jdk.java.net Java 14 (-test)',
+  PUBLISH_LOCATION_PREFIX: "${testPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/14/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
+    https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_windows-x64_bin.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_osx-x64_bin.tar.gz
+    ''',
+  JDK_URLS_LINUX: '''
+    https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
 
-def defaultPrefix = java14Prefix
-def defaultURLsWindows = jdkJavaNetURLsWindows14
-def defaultURLsMac = jdkJavaNetURLsMac14
-def defaultURLsLinux = jdkJavaNetURLsLinux14
+def testExtraPrefix = "archive/sandbox/jres"
 
-// Temporarily publish to the test sandbox
-def java14Parambuild = "PUBLISH_LOCATION_PREFIX=sandbox-test/jres&\
-BUILD_DESCRIPTION=Build+jdk.java.net+Java+14&\
-JUSTJ_MANIFEST_URL=${justjURL}/sandbox-test/jres/14/downloads/latest/justj.manifest&\
-JDK_URLS_WINDOWS=${jdkJavaNetURLsWindows14}&\
-JDK_URLS_MACOS=${jdkJavaNetURLsMac14}&\
-JDK_URLS_LINUX=${jdkJavaNetURLsLinux14}&\
-BUILD_TYPE=nightly&\
-PROMOTE=true"
+def java14Extra = [
+  label: 'Java 14 (++test)',
+  BUILD_DESCRIPTION: 'Build jdk.java.net and adoptopenjdk.net Java 14 (++test)',
+  PUBLISH_LOCATION_PREFIX: "${testExtraPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${testExtraPrefix}/14/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
+    https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_windows-x64_bin.zip
+    https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7.1/OpenJDK14U-jdk_x64_windows_hotspot_14.0.1_7.zip
+    https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7.1_openj9-0.20.0/OpenJDK14U-jdk_x64_windows_openj9_14.0.1_7_openj9-0.20.0.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_osx-x64_bin.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7/OpenJDK14U-jdk_x64_mac_hotspot_14.0.1_7.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7.2_openj9-0.20.0/OpenJDK14U-jdk_x64_mac_openj9_14.0.1_7_openj9-0.20.0.tar.gz
+    ''',
+  JDK_URLS_LINUX: '''
+    https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7/OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7_openj9-0.20.0/OpenJDK14U-jdk_x64_linux_openj9_14.0.1_7_openj9-0.20.0.tar.gz
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
 
-// Java 15 early access definitions
-//
-def java15Prefix = 'sandbox-test/jres';
-def jdkJavaNetURLsWindows15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea%2B26_windows-x64_bin.zip'
-def jdkJavaNetURLsMac15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea%2B26_osx-x64_bin.tar.gz'
-def jdkJavaNetURLsLinux15 = 'https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea%2B26_linux-x64_bin.tar.gz'
+def java15 = [
+  label: 'Java 15 (test)',
+  BUILD_DESCRIPTION: 'Build jdk.java.net Java 15 (-test)',
+  PUBLISH_LOCATION_PREFIX: "${testPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/15/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
+    https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_windows-x64_bin.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_osx-x64_bin.tar.gz
+    ''',
+  JDK_URLS_LINUX: '''
+    https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_linux-x64_bin.tar.gz
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
 
-def java15Parambuild = "PUBLISH_LOCATION_PREFIX=${java15Prefix}&\
-BUILD_DESCRIPTION=Build+jdk.java.net+Java+15 Early Access&\
-JUSTJ_MANIFEST_URL=${justjURL}/${java15Prefix}/15/downloads/latest/justj.manifest&\
-JDK_URLS_WINDOWS=${jdkJavaNetURLsWindows15}&\
-JDK_URLS_MACOS=${jdkJavaNetURLsMac15}&\
-JDK_URLS_LINUX=${jdkJavaNetURLsLinux15}&\
-BUILD_TYPE=nightly&\
-PROMOTE=true"
+def parambuilds = [
+  java11,
+  java14,
+  java14Extra,
+  java15
+]
 
-// Styling links as buttons.
-//
-def buttonStyle = 'style="\
-margin-left: 2em; \
-margin-top: 1ex; \
-margin-bottom: 1ex; \
-font-weight: bold; \
-border: 1px solid Chocolate;  \
-background-color: DarkOrange; \
-color: white; \
-padding: 0.25ex 0.25em; \
-text-align: center; \
-text-decoration: none; \
-display: inline-block;"'
+def defaultPrefix = "sandbox/jres"
+
+def javaDefault = update(java14, [
+    BUILD_DESCRIPTION: 'Build jdk.java.net Java 14',
+    PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
+    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/14/downloads/latest/justj.manifest"
+  ])
 
 // Use declarative syntax to run commands inside a Groovy sand-box container.
 pipeline {
@@ -98,65 +126,69 @@ pipeline {
     string(
       name: 'PIPELINE_VERSION',
       defaultValue: "${pipelineVersion}",
-      description: '''
+      description: """${pretty(
+        '''
         If the parameter definitions have changed, this version will be out-dated.
         The script will run but will do nothing other than updating the parameter definitions of the job as a side-effect.
-        ''')
+        '''
+      )}""")
 
     string(
       name: 'BUILD_DESCRIPTION',
       defaultValue: 'Build jdk.java.net Java 14',
-      description: """
-        Use one of the following links to reconfigure the other parameters below.<br/>
-        <a href="parambuild?${java11Parambuild}" ${buttonStyle}>Java 11</a>
-        <a href="parambuild?${java14Parambuild}" ${buttonStyle}>Java 14 (test)</a>
-        <a href="parambuild?${java15Parambuild}" ${buttonStyle}>Java 15+ea</a>
-        """)
+      description: """${pretty(
+        "Use one of the following links to reconfigure the other parameters below.<br/>${buttons(parambuilds)}"
+        )}""")
 
     string(
       name: 'PUBLISH_LOCATION_PREFIX',
-      defaultValue: "${defaultPrefix}",
-      description: """
-        The location under <a href="${justjURL}/" target="jres">${justjURL}/\${PUBLISH_LOCATION_PREFIX}/\${java.version}/downloads/</a> where to publish the results.
+      defaultValue: "${javaDefault.PUBLISH_LOCATION_PREFIX}",
+      description: """${pretty(
+        '''
+        The location under <a href="''' + justjURL + '''/" target="jres">''' + justjURL + '''/${PUBLISH_LOCATION_PREFIX}/${java.version}/downloads/</a> where to publish the results.
         <br/>
         Generally just use the default unless you plan to delete the results after the promotion.
-        """)
+        '''
+        )}""")
 
     string(
       name: 'JUSTJ_MANIFEST_URL',
-      defaultValue: "${justjURL}/${defaultPrefix}/14/downloads/latest/justj.manifest",
-      description: """
+      defaultValue: "${javaDefault.JUSTJ_MANIFEST_URL}",
+      description: """${pretty(
+        '''
         Reuse an existing build of the JREs rather than building new ones.
-        In general, copy a justj.manifest link from an existing <a href="${justjURL}/${defaultPrefix}" target="jres">jres/\${java.version}/downloads/latest/justj.manifest</a>.
+        In general, copy a justj.manifest link from an existing <a href="''' + "${justjURL}/${defaultPrefix}" + '''" target="jres">jres/${java.version}/downloads/latest/justj.manifest</a>.
         The JDK URLs specified below will be ignored in this case.
-        <br/>
         <b>To build new JREs, clear this parameter field!<b>
-        <b>To do a release build, ensure that this field specifies the \${java.version} to be released.<b>
-        """)
+        <b>To do a release build, ensure that this field specifies the ${java.version} to be released.<b>
+        '''
+        )}""")
 
     text(
       name: 'JDK_URLS_WINDOWS',
-      defaultValue: "${defaultURLsWindows}",
+      defaultValue: "${pretty(javaDefault.JDK_URLS_WINDOWS)}",
       description: 'One or more URLs to a Windows zip of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
       name: 'JDK_URLS_MACOS',
-      defaultValue: "${defaultURLsMac}",
+      defaultValue: "${pretty(javaDefault.JDK_URLS_MACOS)}",
       description: 'One or more URLs to a MacOS tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
       name: 'JDK_URLS_LINUX',
-      defaultValue: "${defaultURLsLinux}",
+      defaultValue: "${pretty(javaDefault.JDK_URLS_LINUX)}",
       description: 'One or more URLs to a Linux tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     choice(
       name: 'BUILD_TYPE',
       choices: ['nightly', 'milestone', 'release'],
-      description: '''
+      description: """${pretty(
+        '''
         The type of build to produce.
         A release build will not do a new build but rather will promote the most recent milestone build.
         None of the values specified above are therefore relevant in this case, <b>except that the Java version of the JUSTJ_MANIFEST_URL determines which update site will be released</b>.
-        ''')
+        '''
+        )}""")
 
     booleanParam(
       name: 'PROMOTE',
@@ -400,4 +432,58 @@ pipeline {
       deleteDir()
     }
   }
+}
+
+def pretty(string) {
+  return string.replaceAll("^\r?\n", "").replaceAll("\r?\n\$", "").stripIndent()
+}
+
+def update(map1, map2) {
+  def result = map1.clone()
+  result.putAll(map2)
+  return result
+}
+
+def buttons(list) {
+  // Styling links as buttons.
+  //
+  def buttonStyle = '''
+     margin-left: 2em; 
+     margin-top: 1ex;
+     margin-bottom: 1ex;
+     font-weight: bold;
+     border: 1px solid Chocolate;
+     background-color: DarkOrange;
+     color: white;
+     padding: 0.25ex 0.25em;
+     text-align: center;
+     text-decoration: none;
+     display: inline-block;
+   '''.replaceAll("\\s+", " ").trim()
+
+  def result = ""
+  list.each {
+    result +=  "\n<a href='parambuild?${parambuild(it)}' style='${buttonStyle}'>${it.label}</a>"
+  }
+  return result
+}
+
+def parambuild(arguments) {
+  def result = ""
+  arguments.each { entry ->
+    // Ignore lower case entries
+    if (entry.key.matches("[A-Z0-9_]+")) {
+      if (!result.isEmpty()) {
+        result += "&"
+      }
+      result += entry.key
+      result += "="
+      result += encode(entry.value);
+    }
+  }
+  return result
+}
+
+def encode(string) {
+  return string.replace("\r", "").replaceAll("^\n", "").replaceAll("\\s+\$", "").stripIndent().replace("\r", "").replace("%", "%25").replace("&", "%26").replace("\n", "%0A").replace("+", "%2B").replace(" ", "+")
 }
