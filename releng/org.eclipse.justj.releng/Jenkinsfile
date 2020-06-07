@@ -69,6 +69,30 @@ def java14Extra = [
   PROMOTE: 'true'
 ]
 
+def java11Extra = [
+  label: 'Java 11 (++test)',
+  BUILD_DESCRIPTION: 'Build jdk.java.net and adoptopenjdk.net Java 11 (++test)',
+  PUBLISH_LOCATION_PREFIX: "${testExtraPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${testExtraPrefix}/11/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
+    https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip
+    https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10.2/OpenJDK11U-jdk_x64_windows_hotspot_11.0.7_10.zip
+    https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10.1_openj9-0.20.0/OpenJDK11U-jdk_x64_windows_openj9_11.0.7_10_openj9-0.20.0.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_osx-x64_bin.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_x64_mac_hotspot_11.0.7_10.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10.2_openj9-0.20.0/OpenJDK11U-jdk_x64_mac_openj9_11.0.7_10_openj9-0.20.0.tar.gz
+    ''',
+  JDK_URLS_LINUX: '''
+    https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz
+    https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10_openj9-0.20.0/OpenJDK11U-jdk_x64_linux_openj9_11.0.7_10_openj9-0.20.0.tar.gz
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
+
 def java15 = [
   label: 'Java 15 (test)',
   BUILD_DESCRIPTION: 'Build jdk.java.net Java 15 (-test)',
@@ -89,6 +113,7 @@ def java15 = [
 
 def parambuilds = [
   java11,
+  java11Extra,
   java14,
   java14Extra,
   java15
