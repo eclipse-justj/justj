@@ -214,9 +214,9 @@ pipeline {
           env.PIPELINE_VERSION = params.PIPELINE_VERSION
           env.PUBLISH_LOCATION_PREFIX = params.PUBLISH_LOCATION_PREFIX
           env.JUSTJ_MANIFEST_URL = params.JUSTJ_MANIFEST_URL
-          env.JDK_URLS_WINDOWS = params.JDK_URLS_WINDOWS
-          env.JDK_URLS_MACOS = params.JDK_URLS_MACOS
-          env.JDK_URLS_LINUX = params.JDK_URLS_LINUX
+          env.JDK_URLS_WINDOWS = pretty(params.JDK_URLS_WINDOWS)
+          env.JDK_URLS_MACOS = pretty(params.JDK_URLS_MACOS)
+          env.JDK_URLS_LINUX = pretty(params.JDK_URLS_LINUX)
           env.BUILD_TYPE = params.BUILD_TYPE
           env.PROMOTE = params.PROMOTE
           if (params.JUSTJ_MANIFEST_URL != '') {
@@ -435,7 +435,7 @@ pipeline {
 }
 
 def pretty(string) {
-  return string.replaceAll("^\r?\n", "").replaceAll("\r?\n\$", "").stripIndent()
+  return string.replaceAll("^\r?\n", "").replaceAll("\r?\n\$", "").replace("\r", "").stripIndent()
 }
 
 def update(map1, map2) {
