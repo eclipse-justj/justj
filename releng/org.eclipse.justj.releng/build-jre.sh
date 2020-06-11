@@ -123,6 +123,8 @@ fi
 #
 all_modules=$($jdk/$jdk_relative_bin_folder/java --list-modules | sed "s/@.*//g" | grep -v "jdk.incubator" | tr '\n' ',' | sed 's/,$//')
 simrel_modules="java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.security.jgss,java.security.sasl,java.sql,java.sql.rowset,java.xml,jdk.jdi,jdk.management,jdk.unsupported,jdk.xml.dom"
+installer_modules="java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.security.jgss,java.sql,java.xml,jdk.xml.dom,jdk.unsupported"
+
 
 # Create an Ant build file for getting system properties, including ones calculated by Equinox.
 #
@@ -214,6 +216,18 @@ jres=(
   "JRE Minimal Stripped"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release, stripped of debug information."
   $simrel_modules
+  "--compress=2 $strip_debug"
+
+"$vendor_prefix.jre.installer"
+  "JRE Minimal for Installer"
+  "Provides the minimal modules needed to satisfy all of the bundles of the installer."
+  $installer_modules
+  "--compress=2"
+
+"$vendor_prefix.jre.installer.stripped"
+  "JRE Minimal for Installer Stripped"
+  "Provides the minimal modules needed to satisfy all of the bundles of the installer, stripped of debug information."
+  $installer_modules
   "--compress=2 $strip_debug"
 )
 
