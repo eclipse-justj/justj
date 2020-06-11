@@ -182,14 +182,14 @@ jres=(
 
 "$vendor_prefix.jre.base"
   "JRE Base"
-  "Provides the minimal modules needed to launch Equinox."
-  java.base,java.xml
+  "Provides the minimal modules needed to launch Equinox without reflection warnings."
+  java.base,java.xml,jdk.unsupported
   "--compress=2"
 
 "$vendor_prefix.jre.base.stripped"
   "JRE Base Stripped"
-  "Provides the minimal modules needed to launch Equinox, stripped of debug information."
-  java.base,java.xml
+  "Provides the minimal modules needed to launch Equinox without reflection warnings, stripped of debug information."
+  java.base,java.xml,jdk.unsupported
   "--compress=2 $strip_debug"
 
 "$vendor_prefix.jre.full"
