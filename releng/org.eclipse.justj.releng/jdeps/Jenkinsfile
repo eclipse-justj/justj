@@ -13,11 +13,16 @@ pipeline {
 
   parameters {
     string(
-      name: 'REPOSITORY_URL',
-      defaultValue: 'https://download.eclipse.org/staging/2020-06',
-      description: '''
-        Enter the URL of a simple repository to analyze all the modules dependencies of that repository.
-        ''')
+      name: 'URL',
+      defaultValue: '',
+      description: """${pretty(
+        '''
+        The script will run but will do nothing other than updating the parameter definitions of the job as a side-effect.
+        Enter the URL of a simple repository or a product *.tar.gz to analyze all the modules dependencies of that repository or product.
+        <br>
+        E.g., https://download.eclipse.org/staging/2020-06 or https://download.eclipse.org/oomph/epp/2020-06/R/eclipse-inst-linux64.tar.gz
+        '''
+      )}""")
   }
   
   environment {
@@ -28,15 +33,16 @@ pipeline {
     stage('Download Jars') {
       steps {
         script {
-          if (params.REPOSITORY_URL != "" && !params.REPOSITORY_URL.startsWith("https://download.eclipse.org/")) {
-            error("Only repositories located at https://download.eclipse.org/ are permitted.")
+          if (params.URL != "" && !params.URL.startsWith("https://download.eclipse.org/")) {
+            error("Only repositories or products located at https://download.eclipse.org/ are supported.")
           } else {
-            if (params.REPOSITORY_URL == "") {
+            env.REPORT_BASE_LOCATION = "jdeps"
+            if (params.URL == "") {
               echo "Only rebuilding the index."
             } else {
-              env.REPOSITORY_LOCATION = "/home/data/httpd/" + params.REPOSITORY_URL.replace("https:/", "")
-              env.REPOSITORY_REPORT_LOCATION = params.REPOSITORY_URL.replace("https://download.eclipse.org/", "")
-              echo "Using repository ${env.REPOSITORY_LOCATION}"
+              env.LOCATION = "/home/data/httpd/" + params.URL.replace("https:/", "")
+              env.REPORT_LOCATION = params.URL.replace("https://download.eclipse.org/", "")
+              echo "Using repository ${env.LOCATION}"
             }
             sh '''
               mkdir -p org/eclipse/justj/codegen/templates/jdeps/
@@ -47,10 +53,17 @@ pipeline {
             '''
             sshagent(['projects-storage.eclipse.org-bot-ssh']) {
               script {
-                if (params.REPOSITORY_URL != "") {
+                if (params.URL != "") {
                   sh '''
-                    mkdir plugins
-                    rsync -avsh --exclude '*.source_*' "genie.justj@projects-storage.eclipse.org:$REPOSITORY_LOCATION/plugins/*.jar" plugins/
+                    if [[ "$LOCATION" == *.tar.gz ]]; then
+                      rsync -avsh "genie.justj@projects-storage.eclipse.org:$LOCATION" .
+                      tar -xf $(basename $LOCATION)
+                      mv */plugins plugins
+                      rm plugins/*.source_* || true
+                    else
+                      mkdir plugins
+                      rsync -avsh --exclude '*.source_*' "genie.justj@projects-storage.eclipse.org:$LOCATION/plugins/*.jar" plugins/
+                    fi
                     cd plugins
                     for plugin in *.jar; do
                       jdeps --ignore-missing-deps --multi-release 14 --print-module-deps $plugin > $plugin-out-deps 2> $plugin-error-deps || true
@@ -61,29 +74,29 @@ pipeline {
                       fi
                       cat $plugin-out-deps
                     done
-                    java -cp .. org.eclipse.justj.codegen.templates.jdeps.JdepsIndex . $REPOSITORY_URL
-                    ssh genie.justj@projects-storage.eclipse.org "mkdir -p $JUSTJ_STORAGE_LOCATION/jdeps/$REPOSITORY_REPORT_LOCATION"
-                    scp index.html justj.modules genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps/$REPOSITORY_REPORT_LOCATION
+                    java -cp .. org.eclipse.justj.codegen.templates.jdeps.JdepsIndex . $URL
+                    ssh genie.justj@projects-storage.eclipse.org "mkdir -p $JUSTJ_STORAGE_LOCATION/$REPORT_BASE_LOCATION/$REPORT_LOCATION"
+                    scp index.html justj.modules genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/$REPORT_BASE_LOCATION/$REPORT_LOCATION
                     '''
                 }
               }
 
               // Build the index.
               sh '''
-                mkdir jdeps
-                cd jdeps
-                rsync -avsh "genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps/" .
+                mkdir -p $REPORT_BASE_LOCATION
+                cd $REPORT_BASE_LOCATION
+                rsync -avsh "genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/$REPORT_BASE_LOCATION/" .
                 java -cp .. org.eclipse.justj.codegen.templates.jdeps.JdepsIndex -index .
-                rsync -avsh . "genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/jdeps"
+                rsync -avsh . "genie.justj@projects-storage.eclipse.org:$JUSTJ_STORAGE_LOCATION/$REPORT_BASE_LOCATION"
                 '''
 
               script {
-                if (params.REPOSITORY_URL != "") {
+                if (params.URL != "") {
                   dir('plugins') {
                     archiveArtifacts '*-deps,index.html,justj.modules'
                   }
                 } else {
-                  dir('jdeps') {
+                  dir(env.REPORT_BASE_LOCATION) {
                     archiveArtifacts 'index.html,justj.modules'
                   }
                 }
@@ -94,4 +107,8 @@ pipeline {
       }
     }
   }
+}
+
+def pretty(string) {
+  return string.replaceAll("^\r?\n", "").replaceAll("\r?\n\$", "").replace("\r", "").stripIndent()
 }
