@@ -16,6 +16,7 @@ if [[ $OSTYPE == darwin* ]]; then
   strip_debug="--strip-debug"
   eclipse_root="Eclipse.app/Contents/Eclipse"
   eclipse_executable="Eclipse.app/Contents/Macos/eclipse"
+  unpack200_executable="unpack200"
   if [[ "$JDK_URLS_MACOS" != "" && $# == 0 ]]; then
     urls=$JDK_URLS_MACOS
   fi
@@ -30,6 +31,7 @@ elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
   strip_debug="--strip-debug"
   eclipse_root="eclipse"
   eclipse_executable="eclipse/eclipsec.exe"
+  unpack200_executable="unpack200.exe"
   if [[ "$JDK_URLS_WINDOWS" != "" && $# == 0 ]]; then
     urls=$JDK_URLS_WINDOWS
   fi
@@ -44,6 +46,7 @@ else
   strip_debug="--strip-debug"
   eclipse_root="eclipse"
   eclipse_executable="eclipse/eclipse"
+  unpack200_executable="unpack200"
   if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
     urls=$JDK_URLS_LINUX
   fi
@@ -59,7 +62,7 @@ if [[ "$urls" == "" ]]; then
     urls=$@
   else
     # Default to Java 14 Open JDK.
-    urls="https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1$jdk_suffix"
+    urls="https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2$jdk_suffix"
   fi
 fi
 
@@ -78,7 +81,7 @@ fi
 
 # Download an os-specific version of Eclipse.
 #
-eclipse_url="https://www.eclipse.org/downloads/download.php?r=1&file=/eclipse/downloads/drops4/S-4.16M1-202004090200/eclipse-SDK-4.16M1$eclipse_suffix"
+eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.16-202006040540/eclipse-SDK-4.16$eclipse_suffix"
 eclipse_file=${eclipse_url##*/}
 
 if [ ! -f $eclipse_file ]; then
@@ -245,6 +248,9 @@ for ((i=0; i<${#jres[@]}; i+=5)); do
   # Generate the JRE using jlink from the JDK.
   echo "Generating: $jre_folder"
   $jdk/$jdk_relative_bin_folder/jlink --add-modules=$modules $jlink_args --output $jre_folder
+  if [[ -f $jdk/$jdk_relative_bin_folder/$unpack200_executable ]]; then
+    cp $jdk/$jdk_relative_bin_folder/$unpack200_executable $jre_folder/bin
+  fi
 
   # Build the -vm arg value.
   jre_vm_arg="$jre_folder/$jre_relative_vm_arg"
