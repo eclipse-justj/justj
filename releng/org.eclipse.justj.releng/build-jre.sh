@@ -221,17 +221,18 @@ jres=(
   $simrel_modules
   "--compress=2 $strip_debug"
 
-"$vendor_prefix.jre.installer"
-  "JRE Minimal for Installer"
-  "Provides the minimal modules needed to satisfy all of the bundles of the installer."
-  $installer_modules
-  "--compress=2"
+#"$vendor_prefix.jre.installer"
+#  "JRE Minimal for Installer"
+#  "Provides the minimal modules needed to satisfy all of the bundles of the installer."
+#  $installer_modules
+#  "--compress=2"
 
-"$vendor_prefix.jre.installer.stripped"
-  "JRE Minimal for Installer Stripped"
-  "Provides the minimal modules needed to satisfy all of the bundles of the installer, stripped of debug information."
-  $installer_modules
-  "--compress=2 $strip_debug"
+#"$vendor_prefix.jre.installer.stripped"
+#  "JRE Minimal for Installer Stripped"
+#  "Provides the minimal modules needed to satisfy all of the bundles of the installer, stripped of debug information."
+#  $installer_modules
+#  "--compress=2 $strip_debug"
+
 )
 
 # Iterate over the tuples.

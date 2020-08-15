@@ -4,7 +4,7 @@
 
 
 ###
-PUBLISH_LOCATION_PREFIX="sandbox-test/jres"
+PUBLISH_LOCATION_PREFIX="jres-test"
 #
 PUBLISH_LOCATION_PREFIX_ENCODED="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$PUBLISH_LOCATION_PREFIX")"
 

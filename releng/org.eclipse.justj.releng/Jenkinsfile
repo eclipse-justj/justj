@@ -5,13 +5,15 @@ def pipelineVersion = '1'
 
 def justjURL = 'https://download.eclipse.org/justj'
 
-def testPrefix = "sandbox-test/jres"
+def testPrefix = "jres-test"
+def testExtraPrefix = "archive/jres-test"
+def defaultPrefix = "jres"
 
 def java11 = [
-  label: 'Java 11 (test)',
-  BUILD_DESCRIPTION: 'Build jdk.java.net Java 11 (-test)',
-  PUBLISH_LOCATION_PREFIX: "${testPrefix}",
-  JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/11/downloads/latest/justj.manifest",
+  label: 'Java 11',
+  BUILD_DESCRIPTION: 'Build jdk.java.net Java 11',
+  PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
     https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_windows-x64_bin.zip
     ''',
@@ -42,8 +44,6 @@ def java14 = [
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
 ]
-
-def testExtraPrefix = "archive/sandbox/jres"
 
 def java14Extra = [
   label: 'Java 14 (++test)',
@@ -118,8 +118,6 @@ def parambuilds = [
   java14Extra,
   java15
 ]
-
-def defaultPrefix = "sandbox/jres"
 
 def javaDefault = update(java14, [
     BUILD_DESCRIPTION: 'Build jdk.java.net Java 14',

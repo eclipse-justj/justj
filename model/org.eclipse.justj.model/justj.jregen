@@ -8,7 +8,7 @@
     provider="Eclipse JustJ"
     providerImageName="justj32.png"
     target="jre-gen"
-    source="https://download.eclipse.org/justj/sandbox/jres/14/downloads/latest/justj.manifest"
+    source="https://download.eclipse.org/justj/jres/14/downloads/latest/justj.manifest"
     localCache="local-cache">
   <touchpoints
       phase="uninstall">
