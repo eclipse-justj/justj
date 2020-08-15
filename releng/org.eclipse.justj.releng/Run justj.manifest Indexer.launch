@@ -13,6 +13,6 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.justj.codegen.model.util.Indexer"/>
 <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="org.eclipse.justj.codegen"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="${resource_loc:/org.eclipse.justj.model/local-cache}/justj.manifest&#13;&#10;https://download.eclipse.org/justj/sandbox/jres/latest/justj.manifest"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="${resource_loc:/org.eclipse.justj.model/local-cache}/justj.manifest&#13;&#10;https://download.eclipse.org/justj/jres/latest/justj.manifest"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.justj.codegen"/>
 </launchConfiguration>
