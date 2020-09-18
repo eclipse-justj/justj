@@ -158,7 +158,7 @@ pipeline {
 
     string(
       name: 'BUILD_DESCRIPTION',
-      defaultValue: 'Build jdk.java.net Java 14',
+      defaultValue: 'Build jdk.java.net Java 15',
       description: """${pretty(
         "Use one of the following links to reconfigure the other parameters below.<br/>${buttons(parambuilds)}"
         )}""")
