@@ -99,13 +99,13 @@ def java15 = [
   PUBLISH_LOCATION_PREFIX: "${testPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/15/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_windows-x64_bin.zip
+    https://download.java.net/java/GA/jdk15/779bf45e88a44cbd9ea6621d33e33db1/36/GPL/openjdk-15_windows-x64_bin.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_osx-x64_bin.tar.gz
+    https://download.java.net/java/GA/jdk15/779bf45e88a44cbd9ea6621d33e33db1/36/GPL/openjdk-15_osx-x64_bin.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://download.java.net/java/early_access/jdk15/26/GPL/openjdk-15-ea+26_linux-x64_bin.tar.gz
+    https://download.java.net/java/GA/jdk15/779bf45e88a44cbd9ea6621d33e33db1/36/GPL/openjdk-15_linux-x64_bin.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
@@ -119,10 +119,10 @@ def parambuilds = [
   java15
 ]
 
-def javaDefault = update(java14, [
-    BUILD_DESCRIPTION: 'Build jdk.java.net Java 14',
+def javaDefault = update(java15, [
+    BUILD_DESCRIPTION: 'Build jdk.java.net Java 15',
     PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
-    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/14/downloads/latest/justj.manifest"
+    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/15/downloads/latest/justj.manifest"
   ])
 
 // Use declarative syntax to run commands inside a Groovy sand-box container.
