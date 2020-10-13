@@ -11,6 +11,7 @@ if [[ $OSTYPE == darwin* ]]; then
   eclipse_suffix="-macosx-cocoa-x86_64.tar.gz"
   jre_suffix="macosx-x86_64"
   jdk_relative_bin_folder="Contents/Home/bin"
+  jdk_relative_lib_folder="Contents/Home/lib"
   jdk_relative_vm_arg="Contents/MacOS/libjli.dylib"
   jre_relative_vm_arg="lib/libjli.dylib"
   strip_debug="--strip-debug"
@@ -26,6 +27,7 @@ elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
   eclipse_suffix="-win32-x86_64.zip"
   jre_suffix="win32-x86_64"
   jdk_relative_bin_folder="bin"
+  jdk_relative_lib_folder="lib"
   jdk_relative_vm_arg="bin"
   jre_relative_vm_arg="bin"
   strip_debug="--strip-debug"
@@ -41,6 +43,7 @@ else
   eclipse_suffix="-linux-gtk-x86_64.tar.gz"
   jre_suffix="linux-x86_64"
   jdk_relative_bin_folder="bin"
+  jdk_relative_lib_folder="lib"
   jdk_relative_vm_arg="bin"
   jre_relative_vm_arg="bin"
   strip_debug="--strip-debug"
@@ -190,53 +193,62 @@ jres=(
   "Provides the minimal modules needed to launch Equinox without reflection warnings."
   java.base,java.xml,jdk.unsupported
   "--compress=2"
+  true
+  
 
 "$vendor_prefix.jre.base.stripped"
   "JRE Base Stripped"
   "Provides the minimal modules needed to launch Equinox without reflection warnings, stripped of debug information."
   java.base,java.xml,jdk.unsupported
   "--compress=2 $strip_debug"
+  false
 
 "$vendor_prefix.jre.full"
   "JRE Complete"
   "Provides the complete set of modules of the JDK, excluding incubators."
   $all_modules
   "--compress=2"
+  true
 
 "$vendor_prefix.jre.full.stripped"
   "JRE Complete Stripped"
   "Provides the complete set of modules of the JDK, excluding incubators, stripped of debug information."
   $all_modules
   "--compress=2 $strip_debug"
+  false
 
 "$vendor_prefix.jre.minimal"
   "JRE Minimal"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release."
   $simrel_modules
   "--compress=2"
+  true
 
 "$vendor_prefix.jre.minimal.stripped"
   "JRE Minimal Stripped"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release, stripped of debug information."
   $simrel_modules
   "--compress=2 $strip_debug"
-
+  false
+  
 #"$vendor_prefix.jre.installer"
 #  "JRE Minimal for Installer"
 #  "Provides the minimal modules needed to satisfy all of the bundles of the installer."
 #  $installer_modules
 #  "--compress=2"
+#	true
 
 #"$vendor_prefix.jre.installer.stripped"
 #  "JRE Minimal for Installer Stripped"
 #  "Provides the minimal modules needed to satisfy all of the bundles of the installer, stripped of debug information."
 #  $installer_modules
 #  "--compress=2 $strip_debug"
+#	false
 
 )
 
 # Iterate over the tuples.
-for ((i=0; i<${#jres[@]}; i+=5)); do
+for ((i=0; i<${#jres[@]}; i+=6)); do
 
   jre_name=${jres[i]}
   jre_label="$vendor_label ${jres[i+1]}"
@@ -245,12 +257,19 @@ for ((i=0; i<${#jres[@]}; i+=5)); do
   rm -rf $jre_folder
   modules=${jres[i+3]}
   jlink_args=${jres[i+4]}
-
+  include_source=${jres[i+5]}
+  
   # Generate the JRE using jlink from the JDK.
   echo "Generating: $jre_folder"
   $jdk/$jdk_relative_bin_folder/jlink --add-modules=$modules $jlink_args --output $jre_folder
   if [[ -f $jdk/$jdk_relative_bin_folder/$unpack200_executable ]]; then
     cp $jdk/$jdk_relative_bin_folder/$unpack200_executable $jre_folder/bin
+  fi
+  
+  # Include src.zip if needed
+  if [ "$include_source" = true ]; then
+    echo "Copying src.zip from ${jdk}/${jdk_relative_lib_folder}/src.zip into ${jre_folder}/lib"
+    cp $jdk/$jdk_relative_lib_folder/src.zip $jre_folder/lib
   fi
 
   # Build the -vm arg value.
