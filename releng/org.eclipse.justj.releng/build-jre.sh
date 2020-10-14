@@ -191,10 +191,9 @@ jres=(
 "$vendor_prefix.jre.base"
   "JRE Base"
   "Provides the minimal modules needed to launch Equinox without reflection warnings."
-  java.base,java.xml,jdk.unsupported
+  java.base,java.xml,jdk.unsupported,jdk.jdwp.agent
   "--compress=2"
-  true
-  
+  filter
 
 "$vendor_prefix.jre.base.stripped"
   "JRE Base Stripped"
@@ -220,9 +219,9 @@ jres=(
 "$vendor_prefix.jre.minimal"
   "JRE Minimal"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release."
-  $simrel_modules
+  $simrel_modules,jdk.jdwp.agent
   "--compress=2"
-  true
+  filter
 
 "$vendor_prefix.jre.minimal.stripped"
   "JRE Minimal Stripped"
@@ -230,20 +229,6 @@ jres=(
   $simrel_modules
   "--compress=2 $strip_debug"
   false
-  
-#"$vendor_prefix.jre.installer"
-#  "JRE Minimal for Installer"
-#  "Provides the minimal modules needed to satisfy all of the bundles of the installer."
-#  $installer_modules
-#  "--compress=2"
-#	true
-
-#"$vendor_prefix.jre.installer.stripped"
-#  "JRE Minimal for Installer Stripped"
-#  "Provides the minimal modules needed to satisfy all of the bundles of the installer, stripped of debug information."
-#  $installer_modules
-#  "--compress=2 $strip_debug"
-#	false
 
 )
 
@@ -258,18 +243,28 @@ for ((i=0; i<${#jres[@]}; i+=6)); do
   modules=${jres[i+3]}
   jlink_args=${jres[i+4]}
   include_source=${jres[i+5]}
-  
+
   # Generate the JRE using jlink from the JDK.
   echo "Generating: $jre_folder"
   $jdk/$jdk_relative_bin_folder/jlink --add-modules=$modules $jlink_args --output $jre_folder
   if [[ -f $jdk/$jdk_relative_bin_folder/$unpack200_executable ]]; then
     cp $jdk/$jdk_relative_bin_folder/$unpack200_executable $jre_folder/bin
   fi
-  
+
   # Include src.zip if needed
-  if [ "$include_source" = true ]; then
+  if [[ "$include_source" = true ]]; then
     echo "Copying src.zip from ${jdk}/${jdk_relative_lib_folder}/src.zip into ${jre_folder}/lib"
     cp $jdk/$jdk_relative_lib_folder/src.zip $jre_folder/lib
+  elif [[ "$include_source" == filter ]]; then
+    echo "Copying filtered src.zip from ${jdk}/${jdk_relative_lib_folder}/src.zip into ${jre_folder}/lib"
+    rm -rf jre-src
+    mkdir -p jre-src
+    unzip -q ${jdk}/${jdk_relative_lib_folder}/src.zip ${modules//,/\/** }/** -d jre-src
+    cd jre-src
+    zip -r -9 -q ../src.zip *
+    cd -
+    mv src.zip $jre_folder/lib
+    rm -rf jre-src
   fi
 
   # Build the -vm arg value.
