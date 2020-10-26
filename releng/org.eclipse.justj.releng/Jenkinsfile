@@ -291,11 +291,11 @@ pipeline {
 
         stage('Build Linux JRES AArch64') {
           agent {
-            beforeAgent true
             label 'aarch64'
           }
 
           when {
+            beforeAgent true
             not { environment name: 'JDK_URLS_LINUX_AARCH64', value: '' }
           }
 
