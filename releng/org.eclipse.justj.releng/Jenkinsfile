@@ -23,6 +23,8 @@ def java11 = [
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
     ''',
+  JDK_URLS_LINUX_AARCH64: '''
+    ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
 ]
@@ -40,6 +42,8 @@ def java14 = [
     ''',
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
+    ''',
+  JDK_URLS_LINUX_AARCH64: '''
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
@@ -65,6 +69,8 @@ def java14Extra = [
     https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7/OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
     https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7_openj9-0.20.0/OpenJDK14U-jdk_x64_linux_openj9_14.0.1_7_openj9-0.20.0.tar.gz
     ''',
+  JDK_URLS_LINUX_AARCH64: '''
+    ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
 ]
@@ -89,6 +95,8 @@ def java11Extra = [
     https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz
     https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10_openj9-0.20.0/OpenJDK11U-jdk_x64_linux_openj9_11.0.7_10_openj9-0.20.0.tar.gz
     ''',
+  JDK_URLS_LINUX_AARCH64: '''
+    ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
 ]
@@ -99,13 +107,16 @@ def java15 = [
   PUBLISH_LOCATION_PREFIX: "${testPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/15/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://download.java.net/java/GA/jdk15/779bf45e88a44cbd9ea6621d33e33db1/36/GPL/openjdk-15_windows-x64_bin.zip
+    https://download.java.net/java/GA/jdk15.0.1/51f4f36ad4ef43e39d0dfdbaf6549e32/9/GPL/openjdk-15.0.1_windows-x64_bin.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://download.java.net/java/GA/jdk15/779bf45e88a44cbd9ea6621d33e33db1/36/GPL/openjdk-15_osx-x64_bin.tar.gz
+    https://download.java.net/java/GA/jdk15.0.1/51f4f36ad4ef43e39d0dfdbaf6549e32/9/GPL/openjdk-15.0.1_osx-x64_bin.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://download.java.net/java/GA/jdk15/779bf45e88a44cbd9ea6621d33e33db1/36/GPL/openjdk-15_linux-x64_bin.tar.gz
+    https://download.java.net/java/GA/jdk15.0.1/51f4f36ad4ef43e39d0dfdbaf6549e32/9/GPL/openjdk-15.0.1_linux-x64_bin.tar.gz
+    ''',
+  JDK_URLS_LINUX_AARCH64: '''
+    https://download.java.net/java/GA/jdk15.0.1/51f4f36ad4ef43e39d0dfdbaf6549e32/9/GPL/openjdk-15.0.1_linux-aarch64_bin.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
@@ -200,7 +211,12 @@ pipeline {
     text(
       name: 'JDK_URLS_LINUX',
       defaultValue: "${pretty(javaDefault.JDK_URLS_LINUX)}",
-      description: 'One or more URLs to a Linux tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+      description: 'One or more URLs to a Linux tar.gz of a JDK for x86_64, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+
+    text(
+      name: 'JDK_URLS_LINUX_AARCH64',
+      defaultValue: "${pretty(javaDefault.JDK_URLS_LINUX_AARCH64)}",
+      description: 'One or more URLs to a Linux tar.gz of a JDK for aarch64, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     choice(
       name: 'BUILD_TYPE',
@@ -240,6 +256,7 @@ pipeline {
           env.JDK_URLS_WINDOWS = pretty(params.JDK_URLS_WINDOWS)
           env.JDK_URLS_MACOS = pretty(params.JDK_URLS_MACOS)
           env.JDK_URLS_LINUX = pretty(params.JDK_URLS_LINUX)
+          env.JDK_URLS_LINUX_AARCH64 = pretty(params.JDK_URLS_LINUX_AARCH64)
           env.BUILD_TYPE = params.BUILD_TYPE
           env.PROMOTE = params.PROMOTE
           if (params.JUSTJ_MANIFEST_URL != '') {
@@ -264,10 +281,33 @@ pipeline {
           when {
             not { environment name: 'JDK_URLS_LINUX', value: '' }
           }
+
           steps {
             sh '''
             releng/org.eclipse.justj.releng/build-jre.sh
             '''
+          }
+        }
+
+        stage('Build Linux JRES AArch64') {
+          agent {
+            beforeAgent true
+            label 'aarch64'
+          }
+
+          when {
+            not { environment name: 'JDK_URLS_LINUX_AARCH64', value: '' }
+          }
+
+          options { skipDefaultCheckout true }
+
+          steps {
+            cleanWs()
+            unstash 'releng-stash'
+            sh '''
+            releng/org.eclipse.justj.releng/build-jre.sh
+            '''
+            stash includes: '*org.eclipse.justj.*.tar.gz', name: 'linux-aarch64-stash'
           }
         }
 
@@ -333,6 +373,10 @@ pipeline {
     
           if (env.JDK_URLS_WINDOWS != '') {
             unstash 'win-stash'
+          }
+
+          if (env.JDK_URLS_LINUX_AARCH64 != '') {
+            unstash 'linux-aarch64-stash'
           }
 
           // Look for the java.version property in each JRE's properties file, extract out just the major version, and boil those down to unique values.

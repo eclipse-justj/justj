@@ -39,9 +39,18 @@ elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
   fi
 else
   os=linux
-  jdk_suffix="_linux-x64_bin.tar.gz"
-  eclipse_suffix="-linux-gtk-x86_64.tar.gz"
-  jre_suffix="linux-x86_64"
+
+  arch=$(uname -m)
+  if [[ "$arch" == aarch64 ]]; then
+    jdk_suffix="_linux-aarch64_bin.tar.gz"
+    eclipse_suffix="-linux-gtk-aarch64.tar.gz"
+    jre_suffix="linux-aarch64"
+  else
+    jdk_suffix="_linux-x64_bin.tar.gz"
+    eclipse_suffix="-linux-gtk-x86_64.tar.gz"
+    jre_suffix="linux-x86_64"
+  fi
+
   jdk_relative_bin_folder="bin"
   jdk_relative_lib_folder="lib"
   jdk_relative_vm_arg="bin"
@@ -50,8 +59,15 @@ else
   eclipse_root="eclipse"
   eclipse_executable="eclipse/eclipse"
   unpack200_executable="unpack200"
-  if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
-    urls=$JDK_URLS_LINUX
+
+  if [[ "$arch" == aarch64 ]]; then
+    if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_LINUX
+    fi
+  else
+    if [[ "$JDK_URLS_LINUX_AARCH64" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_LINUX_AARCH64
+    fi
   fi
 fi
 
@@ -64,8 +80,8 @@ if [[ "$urls" == "" ]]; then
     # We deliberately want to split on space because a URL should not have spaces.
     urls=$@
   else
-    # Default to Java 14 Open JDK.
-    urls="https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2$jdk_suffix"
+    # Default to Java 15 Open JDK.
+    urls="https://download.java.net/java/GA/jdk15.0.1/51f4f36ad4ef43e39d0dfdbaf6549e32/9/GPL/openjdk-15.0.1$jdk_suffix"
   fi
 fi
 
