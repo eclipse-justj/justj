@@ -61,12 +61,12 @@ else
   unpack200_executable="unpack200"
 
   if [[ "$arch" == aarch64 ]]; then
-    if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
-      urls=$JDK_URLS_LINUX
-    fi
-  else
     if [[ "$JDK_URLS_LINUX_AARCH64" != "" && $# == 0 ]]; then
       urls=$JDK_URLS_LINUX_AARCH64
+    fi
+  else
+    if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_LINUX
     fi
   fi
 fi
