@@ -81,7 +81,7 @@ if [[ "$urls" == "" ]]; then
     urls=$@
   else
     # Default to Java 15 Open JDK.
-    urls="https://download.java.net/java/GA/jdk15.0.1/51f4f36ad4ef43e39d0dfdbaf6549e32/9/GPL/openjdk-15.0.1$jdk_suffix"
+    urls="https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2$jdk_suffix"
   fi
 fi
 
