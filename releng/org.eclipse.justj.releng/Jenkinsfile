@@ -126,7 +126,7 @@ def java16 = [
   label: 'Java 16 (test)',
   BUILD_DESCRIPTION: 'Build jdk.java.net Java 16 (-test)',
   PUBLISH_LOCATION_PREFIX: "${testPrefix}",
-  JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/15/downloads/latest/justj.manifest",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/16/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
     https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16_windows-x64_bin.zip
     ''',
@@ -191,7 +191,7 @@ pipeline {
 
     string(
       name: 'BUILD_DESCRIPTION',
-      defaultValue: 'Build jdk.java.net Java 15',
+      defaultValue: 'Build jdk.java.net Java 16',
       description: """${pretty(
         "Use one of the following links to reconfigure the other parameters below.<br/>${buttons(parambuilds)}"
         )}""")
