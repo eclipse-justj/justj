@@ -122,16 +122,38 @@ def java15 = [
   PROMOTE: 'true'
 ]
 
+def java16 = [
+  label: 'Java 16 (test)',
+  BUILD_DESCRIPTION: 'Build jdk.java.net Java 16 (-test)',
+  PUBLISH_LOCATION_PREFIX: "${testPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${testPrefix}/15/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
+    https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16_windows-x64_bin.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16_osx-x64_bin.tar.gz
+    ''',
+  JDK_URLS_LINUX: '''
+    https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16_linux-x64_bin.tar.gz
+    ''',
+  JDK_URLS_LINUX_AARCH64: '''
+    https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16_linux-aarch64_bin.tar.gz
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
+
 def parambuilds = [
   java11,
   java11Extra,
   java14,
   java14Extra,
-  java15
+  java15,
+  java16
 ]
 
-def javaDefault = update(java15, [
-    BUILD_DESCRIPTION: 'Build jdk.java.net Java 15',
+def javaDefault = update(java16, [
+    BUILD_DESCRIPTION: 'Build jdk.java.net Java 16',
     PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
     JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/15/downloads/latest/justj.manifest"
   ])

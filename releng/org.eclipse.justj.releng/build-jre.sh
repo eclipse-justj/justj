@@ -80,8 +80,8 @@ if [[ "$urls" == "" ]]; then
     # We deliberately want to split on space because a URL should not have spaces.
     urls=$@
   else
-    # Default to Java 15 Open JDK.
-    urls="https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2$jdk_suffix"
+    # Default to Java 16 Open JDK.
+    urls="https://download.java.net/java/GA/jdk16/7863447f0ab643c585b9bdebf67c69db/36/GPL/openjdk-16$jdk_suffix"
   fi
 fi
 
@@ -100,7 +100,7 @@ fi
 
 # Download an os-specific version of Eclipse.
 #
-eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.17-202009021800/eclipse-SDK-4.17$eclipse_suffix"
+eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.19-202103031800/eclipse-SDK-4.19$eclipse_suffix"
 eclipse_file=${eclipse_url##*/}
 
 if [ ! -f $eclipse_file ]; then
@@ -144,7 +144,7 @@ fi
 # Remove the incubator modules.
 #
 all_modules=$($jdk/$jdk_relative_bin_folder/java --list-modules | sed "s/@.*//g" | grep -v "jdk.incubator" | tr '\n' ',' | sed 's/,$//')
-simrel_modules="java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.security.jgss,java.security.sasl,java.sql,java.sql.rowset,java.xml,jdk.crypto.ec,jdk.jdi,jdk.management,jdk.unsupported,jdk.xml.dom"
+simrel_modules="java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.prefs,java.rmi,java.scripting,java.security.jgss,java.security.sasl,java.sql,java.sql.rowset,java.xml,jdk.crypto.ec,jdk.jdi,jdk.management,jdk.unsupported,jdk.xml.dom,jdk.zipfs"
 installer_modules="java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.security.jgss,java.sql,java.xml,jdk.xml.dom,jdk.unsupported"
 
 
@@ -206,15 +206,15 @@ jres=(
 
 "$vendor_prefix.jre.base"
   "JRE Base"
-  "Provides the minimal modules needed to launch Equinox without reflection warnings."
-  java.base,java.xml,jdk.unsupported,jdk.jdwp.agent
+  "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings."
+  java.base,java.logging,java.xml,jdk.unsupported,jdk.jdwp.agent
   "--compress=2"
   filter
 
 "$vendor_prefix.jre.base.stripped"
   "JRE Base Stripped"
-  "Provides the minimal modules needed to launch Equinox without reflection warnings, stripped of debug information."
-  java.base,java.xml,jdk.unsupported
+  "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings, stripped of debug information."
+  java.base,java.logging,java.xml,jdk.unsupported
   "--compress=2 $strip_debug"
   false
 
