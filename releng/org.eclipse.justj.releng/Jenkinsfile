@@ -155,7 +155,7 @@ def parambuilds = [
 def javaDefault = update(java16, [
     BUILD_DESCRIPTION: 'Build jdk.java.net Java 16',
     PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
-    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/15/downloads/latest/justj.manifest"
+    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/16/downloads/latest/justj.manifest"
   ])
 
 // Use declarative syntax to run commands inside a Groovy sand-box container.
