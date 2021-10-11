@@ -8,7 +8,11 @@ unset _JAVA_OPTIONS
 if [[ $OSTYPE == darwin* ]]; then
   os=mac
 
-  arch=x86_64
+  if [[ "$ARCH" == "" ]]; then
+    arch=x86_64
+  else 
+    arch=$ARCH
+  fi
 
   if [[ "$arch" == aarch64 ]]; then
     jdk_suffix="_osx-aarch64_bin.tar.gz"
