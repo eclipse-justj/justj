@@ -196,9 +196,17 @@ if [[ $OSTYPE == cygwin ]]; then
   done
 fi
 
-# On Mac this needs to be absolute.
 jdk_vm_arg="$jdk/$jdk_relative_vm_arg"
-[[ $os == mac ]] && jdk_vm_arg="$PWD/$jdk_vm_arg"
+
+# On Mac it must be absolute.
+if [[ $os == mac ]]; then
+  jdk_vm_arg="$PWD/$jdk_vm_arg"
+  # On the older 11 JDK, it was in a different folder.
+  if [[ ! -f $jdk_vm_arg ]]; then
+    jdk_relative_vm_arg=Contents/Home/lib/libjli.dylib
+    jdk_vm_arg="$PWD/$jdk/$jdk_relative_vm_arg"
+  fi
+fi
 
 # And then on Mac the launch messes up the user.dir so it can't find the build.xml.
 # Also the PWD might contain spaces so we need "" when we use this variable, but then on Linux, an empty string argument is passed and that is used like a class name.
