@@ -7,19 +7,38 @@ unset _JAVA_OPTIONS
 # Behavior and file names depend on the OS.
 if [[ $OSTYPE == darwin* ]]; then
   os=mac
-  jdk_suffix="_osx-x64_bin.tar.gz"
-  eclipse_suffix="-macosx-cocoa-x86_64.tar.gz"
-  jre_suffix="macosx-x86_64"
+
+  arch=x86_64
+
+  if [[ "$arch" == aarch64 ]]; then
+    jdk_suffix="_osx-aarch64_bin.tar.gz"
+    eclipse_suffix="-macosx-cocoa-aarch64.dmg"
+    jre_suffix="macosx-aarc64"
+  else
+    jdk_suffix="_osx-x64_bin.tar.gz"
+    eclipse_suffix="-macosx-cocoa-x86_64.dmg"
+    jre_suffix="macosx-x86_64"
+  fi
+
   jdk_relative_bin_folder="Contents/Home/bin"
   jdk_relative_lib_folder="Contents/Home/lib"
-  jdk_relative_vm_arg="Contents/MacOS/libjli.dylib"
+  # This doesn't work on the Temurim
+  # jdk_relative_vm_arg="Contents/MacOS/libjli.dylib"
+  jdk_relative_vm_arg="Contents/Home/lib/jli/libjli.dylib"
   jre_relative_vm_arg="lib/libjli.dylib"
   strip_debug="--strip-debug"
   eclipse_root="Eclipse.app/Contents/Eclipse"
   eclipse_executable="Eclipse.app/Contents/Macos/eclipse"
   unpack200_executable="unpack200"
-  if [[ "$JDK_URLS_MACOS" != "" && $# == 0 ]]; then
-    urls=$JDK_URLS_MACOS
+
+  if [[ "$arch" == aarch64 ]]; then
+    if [[ "$JDK_URLS_MACOS_AARCH64" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_MACOS_AARCH64
+    fi
+  else
+    if [[ "$JDK_URLS_MACOS" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_MACOS
+    fi
   fi
 elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
   os=win
@@ -87,7 +106,7 @@ if [[ "$urls" == "" ]]; then
     # https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_windows-x64_bin.zip
 
     urls="https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2$jdk_suffix"
-    
+
   fi
 fi
 
@@ -106,7 +125,7 @@ fi
 
 # Download an os-specific version of Eclipse.
 #
-eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.19-202103031800/eclipse-SDK-4.19$eclipse_suffix"
+eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.21-202109060500/eclipse-SDK-4.21$eclipse_suffix"
 eclipse_file=${eclipse_url##*/}
 
 if [ ! -f $eclipse_file ]; then
@@ -142,6 +161,11 @@ if [ ! -d $eclipse_root ]; then
   #rm -rf $eclipse_root
   if [[ $os == win ]]; then
     unzip -q $eclipse_file
+  elif [[ $os == mac ]]; then
+    hdiutil attach $eclipse_file
+    cp -r /Volumes/Eclipse/Eclipse.app .
+    hdiutil detach /Volumes/Eclipse
+    xattr -rc Eclipse.app
   else
     tar -xf $eclipse_file
   fi
@@ -190,14 +214,14 @@ java_version=$(grep "^java.version=" all.properties | sed 's/^.*=//;s/\r//')
 echo "Java Version '$java_version'"
 
 # Compute the name prefix depending on the vendor and VM.
-if grep "^java.vendor.version=" all.properties | grep -q "AdoptOpenJDK"; then
-  vendor_url="https://adoptopenjdk.net/"
+if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
+  vendor_url="https://adoptium.net/"
   if grep "OpenJ9" all.properties; then
-    vendor_label="AdoptOpenJDK J9"
-    vendor_prefix="adoptopenjdk.j9"
+    vendor_label="Adoptium J9"
+    vendor_prefix="adoptium.j9"
   else
-    vendor_label="AdoptOpenJDK Hotspot"
-    vendor_prefix="adoptopenjdk.hotspot"
+    vendor_label="Adoptium OpenJDK Hotspot"
+    vendor_prefix="openjdk.hotspot"
   fi
 else
   vendor_url="https://jdk.java.net/"
@@ -214,42 +238,42 @@ jres=(
   "JRE Base"
   "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings."
   java.base,java.logging,java.xml,jdk.unsupported,jdk.jdwp.agent
-  "--compress=2"
+  "--compress=2 --vm=server"
   filter
 
 "$vendor_prefix.jre.base.stripped"
   "JRE Base Stripped"
   "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings, stripped of debug information."
   java.base,java.logging,java.xml,jdk.unsupported
-  "--compress=2 $strip_debug"
+  "--compress=2 --vm=server $strip_debug"
   false
 
 "$vendor_prefix.jre.full"
   "JRE Complete"
   "Provides the complete set of modules of the JDK, excluding incubators."
   $all_modules
-  "--compress=2"
+  "--compress=2 --vm=server"
   true
 
 "$vendor_prefix.jre.full.stripped"
   "JRE Complete Stripped"
   "Provides the complete set of modules of the JDK, excluding incubators, stripped of debug information."
   $all_modules
-  "--compress=2 $strip_debug"
+  "--compress=2 --vm=server $strip_debug"
   false
 
 "$vendor_prefix.jre.minimal"
   "JRE Minimal"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release."
   $simrel_modules,jdk.jdwp.agent
-  "--compress=2"
+  "--compress=2 --vm=server"
   filter
 
 "$vendor_prefix.jre.minimal.stripped"
   "JRE Minimal Stripped"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release, stripped of debug information."
   $simrel_modules
-  "--compress=2 $strip_debug"
+  "--compress=2 --vm=server $strip_debug"
   false
 
 )
