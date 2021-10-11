@@ -20,10 +20,35 @@ def java11 = [
   JDK_URLS_MACOS: '''
     https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_osx-x64_bin.tar.gz
     ''',
+  JDK_URLS_MACOS_AARCH64: '''
+    ''',
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
+
+def java11Adoptium = [
+  label: 'Java 11 (Adoptium)',
+  BUILD_DESCRIPTION: 'Build Adoptium Java 11',
+  PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jdk_x64_windows_hotspot_11.0.12_7.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jdk_x64_mac_hotspot_11.0.12_7.tar.gz
+    ''',
+  JDK_URLS_MACOS_AARCH64: '''
+    ''',
+  JDK_URLS_LINUX: '''
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jre_x64_linux_hotspot_11.0.12_7.tar.gz
+    ''',
+  JDK_URLS_LINUX_AARCH64: '''
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.12_7.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
@@ -39,6 +64,8 @@ def java14 = [
     ''',
   JDK_URLS_MACOS: '''
     https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_osx-x64_bin.tar.gz
+    ''',
+  JDK_URLS_MACOS_AARCH64: '''
     ''',
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
@@ -63,6 +90,8 @@ def java14Extra = [
     https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_osx-x64_bin.tar.gz
     https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7/OpenJDK14U-jdk_x64_mac_hotspot_14.0.1_7.tar.gz
     https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-14.0.1+7.2_openj9-0.20.0/OpenJDK14U-jdk_x64_mac_openj9_14.0.1_7_openj9-0.20.0.tar.gz
+    ''',
+  JDK_URLS_MACOS_AARCH64: '''
     ''',
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
@@ -90,6 +119,8 @@ def java11Extra = [
     https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_x64_mac_hotspot_11.0.7_10.tar.gz
     https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10.2_openj9-0.20.0/OpenJDK11U-jdk_x64_mac_openj9_11.0.7_10_openj9-0.20.0.tar.gz
     ''',
+  JDK_URLS_MACOS_AARCH64: '''
+    ''',
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
     https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz
@@ -112,6 +143,8 @@ def java15 = [
   JDK_URLS_MACOS: '''
     https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_osx-x64_bin.tar.gz
     ''',
+  JDK_URLS_MACOS_AARCH64: '''
+    ''',
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk15.0.2/0d1cfde4252546c6931946de8db48ee2/7/GPL/openjdk-15.0.2_linux-x64_bin.tar.gz
     ''',
@@ -133,6 +166,8 @@ def java16 = [
   JDK_URLS_MACOS: '''
     https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_osx-x64_bin.tar.gz
     ''',
+  JDK_URLS_MACOS_AARCH64: '''
+    ''',
   JDK_URLS_LINUX: '''
     https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz
     ''',
@@ -144,6 +179,7 @@ def java16 = [
 ]
 
 def parambuilds = [
+  java11Adoptium,
   java11,
   java11Extra,
   java14,
@@ -223,22 +259,27 @@ pipeline {
     text(
       name: 'JDK_URLS_WINDOWS',
       defaultValue: "${pretty(javaDefault.JDK_URLS_WINDOWS)}",
-      description: 'One or more URLs to a Windows zip of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+      description: 'One or more URLs to a Windows zip of a JDK, e.g., from <a href="https://adoptium.net/" target="jdk">https://adoptium.net/</a> or <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
       name: 'JDK_URLS_MACOS',
       defaultValue: "${pretty(javaDefault.JDK_URLS_MACOS)}",
-      description: 'One or more URLs to a MacOS tar.gz of a JDK, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+      description: 'One or more URLs to a MacOS tar.gz of a JDK for x86_64, e.g., from <a href="https://adoptium.net/" target="jdk">https://adoptium.net/</a> or <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+
+    text(
+      name: 'JDK_URLS_MACOS_AARCH64',
+      defaultValue: "${pretty(javaDefault.JDK_URLS_MACOS_AARCH64)}",
+      description: 'One or more URLs to a MacOS tar.gz of a JDK for aarch64, e.g., from <a href="https://adoptium.net/" target="jdk">https://adoptium.net/</a> or <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
       name: 'JDK_URLS_LINUX',
       defaultValue: "${pretty(javaDefault.JDK_URLS_LINUX)}",
-      description: 'One or more URLs to a Linux tar.gz of a JDK for x86_64, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+      description: 'One or more URLs to a Linux tar.gz of a JDK for x86_64, e.g., from <a href="https://adoptium.net/" target="jdk">https://adoptium.net/</a> or <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
       name: 'JDK_URLS_LINUX_AARCH64',
       defaultValue: "${pretty(javaDefault.JDK_URLS_LINUX_AARCH64)}",
-      description: 'One or more URLs to a Linux tar.gz of a JDK for aarch64, e.g., from <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
+      description: 'One or more URLs to a Linux tar.gz of a JDK for aarch64, e.g., from <a href="https://adoptium.net/" target="jdk">https://adoptium.net/</a> or <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     choice(
       name: 'BUILD_TYPE',
@@ -277,6 +318,7 @@ pipeline {
           env.JUSTJ_MANIFEST_URL = params.JUSTJ_MANIFEST_URL
           env.JDK_URLS_WINDOWS = pretty(params.JDK_URLS_WINDOWS)
           env.JDK_URLS_MACOS = pretty(params.JDK_URLS_MACOS)
+          env.JDK_URLS_MACOS_AARCH64 = pretty(params.JDK_URLS_MACOS_AARCH64)
           env.JDK_URLS_LINUX = pretty(params.JDK_URLS_LINUX)
           env.JDK_URLS_LINUX_AARCH64 = pretty(params.JDK_URLS_LINUX_AARCH64)
           env.BUILD_TYPE = params.BUILD_TYPE
