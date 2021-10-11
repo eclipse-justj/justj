@@ -37,12 +37,37 @@ def java11Adoptium = [
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17+35/OpenJDK17-jdk_x64_windows_hotspot_17_35.zip
+    ''',
+  JDK_URLS_MACOS: '''
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17+35/OpenJDK17-jdk_x64_mac_hotspot_17_35.tar.gz
+    ''',
+  JDK_URLS_MACOS_AARCH64: '''
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17+35/OpenJDK17-jdk_aarch64_mac_hotspot_17_35.tar.gz
+    ''',
+  JDK_URLS_LINUX: '''
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17+35/OpenJDK17-jdk_x64_linux_hotspot_17_35.tar.gz
+    ''',
+  JDK_URLS_LINUX_AARCH64: '''
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17+35/OpenJDK17-jdk_aarch64_linux_hotspot_17_35.tar.gz
+    ''',
+  BUILD_TYPE: 'nightly',
+  PROMOTE: 'true'
+]
+
+def java17Adoptium = [
+  label: 'Java 17 (Adoptium)',
+  BUILD_DESCRIPTION: 'Build Adoptium Java 17',
+  PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest",
+  JDK_URLS_WINDOWS: '''
     https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jdk_x64_windows_hotspot_11.0.12_7.zip
     ''',
   JDK_URLS_MACOS: '''
     https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jdk_x64_mac_hotspot_11.0.12_7.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17%2B35/OpenJDK17-jdk_aarch64_mac_hotspot_17_35.tar.gz
     ''',
   JDK_URLS_LINUX: '''
     https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jdk_x64_linux_hotspot_11.0.12_7.tar.gz
@@ -180,6 +205,7 @@ def java16 = [
 
 def parambuilds = [
   java11Adoptium,
+  java17Adoptium,
   java11,
   java11Extra,
   java14,
@@ -188,10 +214,10 @@ def parambuilds = [
   java16
 ]
 
-def javaDefault = update(java16, [
-    BUILD_DESCRIPTION: 'Build jdk.java.net Java 16',
+def javaDefault = update(java17Adoptium, [
+    BUILD_DESCRIPTION: 'Build Adoptium Java 17',
     PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
-    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/16/downloads/latest/justj.manifest"
+    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest"
   ])
 
 // Use declarative syntax to run commands inside a Groovy sand-box container.
@@ -227,7 +253,7 @@ pipeline {
 
     string(
       name: 'BUILD_DESCRIPTION',
-      defaultValue: 'Build jdk.java.net Java 16',
+      defaultValue: 'Build Adoptium Java 17',
       description: """${pretty(
         "Use one of the following links to reconfigure the other parameters below.<br/>${buttons(parambuilds)}"
         )}""")
@@ -396,10 +422,10 @@ pipeline {
             stash includes: '*org.eclipse.justj.*.tar.gz', name: 'win-stash'
           }
         }
-
-        stage('Build MacOS JREs') {
+        
+        stage('Build MacOS JREs x86_64') {
           agent {
-            label 'macos'
+            label 'macos && arm64'
           }
 
           when {
@@ -413,9 +439,33 @@ pipeline {
             cleanWs()
             unstash 'releng-stash'
             sh '''
+            ARCH=x86_64
             releng/org.eclipse.justj.releng/build-jre.sh
             '''
             stash includes: 'org.eclipse.justj.*.tar.gz', name: 'mac-stash'
+          }
+        }
+
+        stage('Build MacOS JREs Aarch64') {
+          agent {
+            label 'macos && arm64'
+          }
+
+          when {
+            beforeAgent true
+            not { environment name: 'JDK_URLS_MACOS_AARCH64', value: '' }
+          }
+
+          options { skipDefaultCheckout true }
+
+          steps {
+            cleanWs()
+            unstash 'releng-stash'
+            sh '''
+            ARCH=aarch64
+            releng/org.eclipse.justj.releng/build-jre.sh
+            '''
+            stash includes: 'org.eclipse.justj.*.tar.gz', name: 'mac-aarch64-stash'
           }
         }
       }
@@ -433,6 +483,10 @@ pipeline {
         script {
           if (env.JDK_URLS_MACOS != '') {
             unstash 'mac-stash'
+          }
+
+          if (env.JDK_URLS_MACOS_AARCH64 != '') {
+            unstash 'mac-aarch64-stash'
           }
     
           if (env.JDK_URLS_WINDOWS != '') {
