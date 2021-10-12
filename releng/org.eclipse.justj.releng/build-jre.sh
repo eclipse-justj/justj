@@ -17,7 +17,7 @@ if [[ $OSTYPE == darwin* ]]; then
   if [[ "$arch" == aarch64 ]]; then
     jdk_suffix="_osx-aarch64_bin.tar.gz"
     eclipse_suffix="-macosx-cocoa-aarch64.dmg"
-    jre_suffix="macosx-aarc64"
+    jre_suffix="macosx-aarch64"
   else
     jdk_suffix="_osx-x64_bin.tar.gz"
     eclipse_suffix="-macosx-cocoa-x86_64.dmg"
