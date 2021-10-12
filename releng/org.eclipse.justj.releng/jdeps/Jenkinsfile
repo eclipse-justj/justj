@@ -8,7 +8,7 @@ pipeline {
 
   tools {
     maven 'apache-maven-latest'
-    jdk 'openjdk-jdk14-latest'
+    jdk 'openjdk-jdk11-latest'
   }
 
   parameters {
@@ -20,7 +20,7 @@ pipeline {
         The script will run but will do nothing other than updating the parameter definitions of the job as a side-effect.
         Enter the URL of a simple repository or a product *.tar.gz to analyze all the modules dependencies of that repository or product.
         <br>
-        E.g., https://download.eclipse.org/staging/2020-06 or https://download.eclipse.org/oomph/epp/2020-06/R/eclipse-inst-linux64.tar.gz
+        E.g., https://download.eclipse.org/staging/2021-12 or https://download.eclipse.org/oomph/epp/2021-09/R/eclipse-inst-linux64.tar.gz
         '''
       )}""")
   }
