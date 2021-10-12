@@ -448,7 +448,7 @@ pipeline {
 
         stage('Build MacOS JREs') {
           stages {
-            stage('Build MacOS JREs x86_64')
+            stage('Build MacOS JREs x86_64') {
               agent {
                 label 'macos && arm64'
               }
