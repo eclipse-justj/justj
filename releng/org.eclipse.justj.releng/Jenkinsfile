@@ -35,7 +35,7 @@ def java11Adoptium = [
   label: 'Java 11 (Adoptium)',
   BUILD_DESCRIPTION: 'Build Adoptium Java 11',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
-  JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
     https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12+7/OpenJDK11U-jdk_x64_windows_hotspot_11.0.12_7.zip
     ''',
@@ -58,7 +58,7 @@ def java17Adoptium = [
   label: 'Java 17 (Adoptium)',
   BUILD_DESCRIPTION: 'Build Adoptium Java 17',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
-  JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
+  JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
     https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17+35/OpenJDK17-jdk_x64_windows_hotspot_17_35.zip
     ''',
