@@ -129,7 +129,7 @@ fi
 
 # Download an os-specific version of Eclipse.
 #
-eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.21-202109060500/eclipse-SDK-4.21$eclipse_suffix"
+eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.23-202203080310/eclipse-SDK-4.23$eclipse_suffix"
 eclipse_file=${eclipse_url##*/}
 
 if [ ! -f $eclipse_file ]; then
