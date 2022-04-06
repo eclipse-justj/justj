@@ -234,6 +234,7 @@ def java16 = [
 def parambuilds = [
   java11Adoptium,
   java17Adoptium,
+  java18Adoptium,
   java11,
   java11Extra,
   java14,
