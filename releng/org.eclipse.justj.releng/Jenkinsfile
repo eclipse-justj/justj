@@ -252,7 +252,8 @@ def javaDefault = update(java17Adoptium, [
 
 // Use declarative syntax to run commands inside a Groovy sand-box container.
 pipeline {
-  agent { label 'any' }
+  // agent { label 'migration' }
+  agent any
 
   options {
     buildDiscarder(logRotator(numToKeepStr: '10'))
