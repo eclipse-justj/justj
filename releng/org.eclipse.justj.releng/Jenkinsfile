@@ -599,7 +599,24 @@ pipeline {
             exit 1
           fi
           '''
+
+        sh '''
+          # Unpack all the Windows JREs, sign all their *.exe and *.dll, and repackage them.
+          for jre in *-win32-*.tar.gz; do
+            rm -rf unpacked
+            mkdir -p unpacked
+            cd unpacked
+            tar -xf ../$jre
+            mvn --no-transfer-progress -f ../releng/org.eclipse.justj.releng/winsigner/pom.xml  -Dcbi.winsigner.signFiles=$(echo $(find ${PWD} -name "*.dll" -o -name "*.exe") | sed 's/ /,/g') clean verify
+            rm ../$jre
+            tar -czf ../$jre .
+            cd -
+            rm -rf unpacked
+          done
+        '''
+
         sh 'ls org.eclipse.justj.*.tar.gz > justj.manifest'
+
         dir('releng/org.eclipse.justj.releng/index') {
           sh '''
             mvn --no-transfer-progress -Djustj.manifest.location=../../../justj.manifest -Djustj.manifest.url=$JUSTJ_URL/$JUSTJ_JRE_PUBLISH_LOCATION/justj.manifest clean verify
