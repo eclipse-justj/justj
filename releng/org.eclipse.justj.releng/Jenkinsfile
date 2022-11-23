@@ -113,19 +113,19 @@ def java20Adoptium = [
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/20/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-10-28-05-19-beta/OpenJDK-jdk_x64_windows_hotspot_2022-10-28-03-30.zip
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-11-23-11-10-beta/OpenJDK-jdk_x64_windows_hotspot_2022-11-23-03-30.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-10-28-05-19-beta/OpenJDK-jdk_x64_mac_hotspot_2022-10-28-03-30.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-11-23-11-10-beta/OpenJDK-jdk_x64_mac_hotspot_2022-11-23-03-30.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-10-28-05-19-beta/OpenJDK-jdk_aarch64_mac_hotspot_2022-10-28-03-30.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-11-23-11-10-beta/OpenJDK-jdk_aarch64_mac_hotspot_2022-11-23-03-30.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-10-28-05-19-beta/OpenJDK-jdk_x64_linux_hotspot_2022-10-28-03-30.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-11-23-11-10-beta/OpenJDK-jdk_x64_linux_hotspot_2022-11-23-03-30.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-10-28-05-19-beta/OpenJDK-jdk_aarch64_linux_hotspot_2022-10-28-03-30.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-2022-11-23-11-10-beta/OpenJDK-jdk_aarch64_linux_hotspot_2022-11-23-03-30.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
