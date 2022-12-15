@@ -58,7 +58,7 @@ pipeline {
                     if [[ "$LOCATION" == *.tar.gz ]]; then
                       rsync -avsh "genie.justj@projects-storage.eclipse.org:$LOCATION" .
                       tar -xf $(basename $LOCATION)
-                      mv $(echo */plugins | grep -v "epp/plugins") plugins
+                      mv $(echo */plugins | tr ' ' '\n' | grep -v "epp/plugins") plugins
                       rm plugins/*.source_* || true
                     else
                       mkdir plugins
