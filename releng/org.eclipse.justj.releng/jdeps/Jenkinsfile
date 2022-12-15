@@ -40,7 +40,7 @@ pipeline {
             if (params.URL == "") {
               echo "Only rebuilding the index."
             } else {
-              env.LOCATION = "/home/data/httpd/" + params.URL.replace("https:/", "")
+              env.LOCATION = "/home/data/httpd/" + params.URL.replace("https://", "")
               env.REPORT_LOCATION = params.URL.replace("https://download.eclipse.org/", "")
               echo "Using repository ${env.LOCATION}"
             }
@@ -58,7 +58,7 @@ pipeline {
                     if [[ "$LOCATION" == *.tar.gz ]]; then
                       rsync -avsh "genie.justj@projects-storage.eclipse.org:$LOCATION" .
                       tar -xf $(basename $LOCATION)
-                      mv */plugins plugins
+                      mv $(echo */plugins | grep -v "epp/plugins") plugins
                       rm plugins/*.source_* || true
                     else
                       mkdir plugins
