@@ -47,7 +47,7 @@ pipeline {
             sh '''
               mkdir -p org/eclipse/justj/codegen/templates/jdeps/
               cd org/eclipse/justj/codegen/templates/jdeps/
-              curl -O https://git.eclipse.org/c/justj/justj.tools.git/plain/plugins/org.eclipse.justj.codegen/src/org/eclipse/justj/codegen/templates/jdeps/JdepsIndex.java
+              curl -O https://raw.githubusercontent.com/eclipse-justj/justj.tools/master/plugins/org.eclipse.justj.codegen/src/org/eclipse/justj/codegen/templates/jdeps/JdepsIndex.java
               cd -
               javac org/eclipse/justj/codegen/templates/jdeps/JdepsIndex.java
             '''

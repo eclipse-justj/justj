@@ -297,7 +297,7 @@ pipeline {
               branches: [[name: '*/master']],
               doGenerateSubmoduleConfigurations: false,
               submoduleCfg: [],
-              userRemoteConfigs: [[url: 'https://git.eclipse.org/r/justj/justj.git']]
+              userRemoteConfigs: [[url: 'https://github.com/eclipse-justj/justj.git']]
             ]
           )
 

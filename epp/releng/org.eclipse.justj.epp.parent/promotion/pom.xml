@@ -91,7 +91,7 @@ SPDX-License-Identifier: EPL-2.0
                 -root ${project.build.directory}/justj-sync
                 -relative ${org.eclipse.justj.p2.manager.relative}
                 -version-iu org.eclipse.justj.
-                -commit https://git.eclipse.org/c/justj/justj.git/commit/?id=${git.commit}
+                -commit https://github.com/eclipse-justj/justj/commit/${git.commit}
                 -target-url https://download.eclipse.org/justj
                 -promote ${project.basedir}/../../org.eclipse.justj.epp.site/target/repository
                 -timestamp ${build.timestamp}
