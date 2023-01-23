@@ -46,9 +46,22 @@ if [[ $OSTYPE == darwin* ]]; then
   fi
 elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
   os=win
-  jdk_suffix="_windows-x64_bin.zip"
-  eclipse_suffix="-win32-x86_64.zip"
-  jre_suffix="win32-x86_64"
+
+  if [[ "$ARCH" == "" ]]; then
+    arch=x86_64
+  else
+    arch=$ARCH
+  fi
+
+  if [[ "$arch" == aarch64 ]]; then
+    jdk_suffix="_windows-aarch64_bin.zip"
+    eclipse_suffix="-win32-aarch64.zip"
+    jre_suffix="win32-aarch64"
+  else
+    jdk_suffix="_windows-x64_bin.zip"
+    eclipse_suffix="-win32-x86_64.zip"
+    jre_suffix="win32-x86_64"
+  fi
   jdk_relative_bin_folder="bin"
   jdk_relative_lib_folder="lib"
   jdk_relative_vm_arg="bin"
@@ -129,7 +142,11 @@ fi
 
 # Download an os-specific version of Eclipse.
 #
-eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.24-202206070700/eclipse-SDK-4.24$eclipse_suffix"
+if [[ "$ECLIPSE_URL" == "" ]]; then
+  eclipse_url="https://download.eclipse.org/eclipse/downloads/drops4/R-4.24-202206070700/eclipse-SDK-4.24$eclipse_suffix"
+else
+  eclipse_url=$ECLIPSE_URL
+fi
 eclipse_file=${eclipse_url##*/}
 
 if [ ! -f $eclipse_file ]; then
