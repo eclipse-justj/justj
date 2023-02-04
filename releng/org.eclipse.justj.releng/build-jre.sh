@@ -89,8 +89,8 @@ else
 
   jdk_relative_bin_folder="bin"
   jdk_relative_lib_folder="lib"
-  jdk_relative_vm_arg="bin"
-  jre_relative_vm_arg="bin"
+  jdk_relative_vm_arg="bin/java"
+  jre_relative_vm_arg="bin/java"
   strip_debug="--strip-debug"
   eclipse_root="eclipse"
   eclipse_executable="eclipse/eclipse"
