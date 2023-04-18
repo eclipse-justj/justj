@@ -66,7 +66,7 @@ pipeline {
                     fi
                     cd plugins
                     for plugin in *.jar; do
-                      jdeps --ignore-missing-deps --multi-release 14 --print-module-deps $plugin > $plugin-out-deps 2> $plugin-error-deps || true
+                      jdeps --ignore-missing-deps --multi-release 17 --print-module-deps $plugin > $plugin-out-deps 2> $plugin-error-deps || true
                       if [[ $(wc -w < $plugin-error-deps) == 0 ]]; then
                         rm $plugin-error-deps
                       else
