@@ -510,7 +510,7 @@ pipeline {
             tar -xf ../$jre
             mvn --no-transfer-progress -f ../releng/org.eclipse.justj.releng/winsigner/pom.xml  -Dcbi.winsigner.signFiles=$(echo $(find ${PWD} -name "*.dll" -o -name "*.exe") | sed 's/ /,/g') clean verify
             rm ../$jre
-            tar -czf ../$jre .
+            tar -czf ../$jre *
             cd -
             rm -rf unpacked
           done
