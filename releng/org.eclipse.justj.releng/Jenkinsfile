@@ -337,7 +337,7 @@ pipeline {
 
       parallel {
 
-        stage('Build Linux JRES') {
+        stage('Build Linux JREs') {
           when {
             not { environment name: 'JDK_URLS_LINUX', value: '' }
           }
@@ -349,7 +349,7 @@ pipeline {
           }
         }
 
-        stage('Build Linux JRES AArch64') {
+        stage('Build Linux JREs AArch64') {
           agent {
             label 'aarch64'
           }
@@ -371,7 +371,7 @@ pipeline {
           }
         }
 
-        stage('Build Linux JRES PPC64LE') {
+        stage('Build Linux JREs PPC64LE') {
           agent {
             label 'ppc64le'
           }

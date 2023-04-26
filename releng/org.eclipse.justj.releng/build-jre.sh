@@ -107,6 +107,7 @@ else
   elif [[ "$arch" == ppc64le ]]; then
     if [[ "$JDK_URLS_LINUX_PPC64LE" != "" && $# == 0 ]]; then
       urls=$JDK_URLS_LINUX_PPC64LE
+    fi
   else
     if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
       urls=$JDK_URLS_LINUX
