@@ -81,6 +81,10 @@ else
     jdk_suffix="_linux-aarch64_bin.tar.gz"
     eclipse_suffix="-linux-gtk-aarch64.tar.gz"
     jre_suffix="linux-aarch64"
+  elif [[ "$arch" == ppc64le ]]; then
+    jdk_suffix="_linux-ppc64le_bin.tar.gz"
+    eclipse_suffix="-linux-gtk-ppc64le.tar.gz"
+    jre_suffix="linux-ppc64le"
   else
     jdk_suffix="_linux-x64_bin.tar.gz"
     eclipse_suffix="-linux-gtk-x86_64.tar.gz"
@@ -100,6 +104,9 @@ else
     if [[ "$JDK_URLS_LINUX_AARCH64" != "" && $# == 0 ]]; then
       urls=$JDK_URLS_LINUX_AARCH64
     fi
+  elif [[ "$arch" == ppc64le ]]; then
+    if [[ "$JDK_URLS_LINUX_PPC64LE" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_LINUX_PPC64LE
   else
     if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
       urls=$JDK_URLS_LINUX
@@ -123,7 +130,6 @@ if [[ "$urls" == "" ]]; then
     # https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_windows-x64_bin.zip
 
     urls="https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2$jdk_suffix"
-
   fi
 fi
 
