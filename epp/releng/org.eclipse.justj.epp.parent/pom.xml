@@ -121,7 +121,6 @@ SPDX-License-Identifier: EPL-2.0
               <target>
               </target>
               <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.full-17</executionEnvironment>
-              <includePackedArtifacts>true</includePackedArtifacts>
               <environments>
                 <environment>
                   <os>win32</os>
