@@ -96,11 +96,11 @@ SPDX-License-Identifier: EPL-2.0
                 -promote ${project.basedir}/../../org.eclipse.justj.epp.site/target/repository
                 -timestamp ${build.timestamp}
                 -type ${build.type}
-                -breadcrumb "JustJ https://www.eclipse.org/justj/?page=download"
+                -breadcrumb "JustJ https://eclipse.dev/justj/?page=download"
                 -mapping epp->EPP
-                -favicon https://www.eclipse.org/justj/justj_favicon.ico
-                -title-image https://www.eclipse.org/justj/justj_title.svg
-                -body-image https://www.eclipse.org/justj/justj.svg
+                -favicon https://eclipse.dev/justj/justj_favicon.ico
+                -title-image https://eclipse.dev/justj/justj_title.svg
+                -body-image https://eclipse.dev/justj/justj.svg
                 ${org.eclipse.justj.p2.manager.extra.args}
               </appArgLine>
             </configuration>
