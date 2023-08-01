@@ -17,22 +17,22 @@ def java11Adoptium = [
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_x64_windows_hotspot_11.0.19_7.zip
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20+8/OpenJDK11U-jdk_x64_windows_hotspot_11.0.20_8.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_x64_mac_hotspot_11.0.19_7.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20+8/OpenJDK11U-jdk_x64_mac_hotspot_11.0.20_8.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_aarch64_mac_hotspot_11.0.19_7.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20+8/OpenJDK11U-jdk_aarch64_mac_hotspot_11.0.20_8.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20+8/OpenJDK11U-jdk_x64_linux_hotspot_11.0.20_8.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.19_7.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20+8/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.20_8.tar.gz
     ''',
   JDK_URLS_LINUX_PPC64LE: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.19+7/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.19_7.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20+8/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.20_8.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
@@ -44,22 +44,22 @@ def java17Adoptium = [
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7+7/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8+7/OpenJDK17U-jdk_x64_windows_hotspot_17.0.8_7.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7+7/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8+7/OpenJDK17U-jdk_x64_mac_hotspot_17.0.8_7.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7+7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.7_7.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8+7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.8_7.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7+7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8+7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7+7/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8+7/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz
     ''',
   JDK_URLS_LINUX_PPC64LE: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7+7/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.7_7.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.8+7/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.8_7.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
@@ -125,19 +125,19 @@ def java20Adoptium = [
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/20/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.1+9/OpenJDK20U-jdk_x64_windows_hotspot_20.0.1_9.zip
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.2+9/OpenJDK20U-jdk_x64_windows_hotspot_20.0.2_9.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.1+9/OpenJDK20U-jdk_x64_mac_hotspot_20.0.1_9.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.2+9/OpenJDK20U-jdk_x64_mac_hotspot_20.0.2_9.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.1+9/OpenJDK20U-jdk_aarch64_mac_hotspot_20.0.1_9.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.2+9/OpenJDK20U-jdk_aarch64_mac_hotspot_20.0.2_9.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.1+9/OpenJDK20U-jdk_x64_linux_hotspot_20.0.1_9.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.2+9/OpenJDK20U-jdk_x64_linux_hotspot_20.0.2_9.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.1+9/OpenJDK20U-jdk_aarch64_linux_hotspot_20.0.1_9.tar.gz
+    https://github.com/adoptium/temurin20-binaries/releases/download/jdk-20.0.2+9/OpenJDK20U-jdk_aarch64_linux_hotspot_20.0.2_9.tar.gz
     ''',
   JDK_URLS_LINUX_PPC64LE: '''
     ''',
