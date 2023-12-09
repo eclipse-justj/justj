@@ -23,7 +23,7 @@ SPDX-License-Identifier: EPL-2.0
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tycho.scmUrl>scm:git:https://github.com/eclipse-justj/justj.git</tycho.scmUrl>
-    <tycho-version>2.7.5</tycho-version>
+    <tycho-version>4.0.4</tycho-version>
     <jarsigner-version>1.3.2</jarsigner-version>
     <os-jvm-flags/>
   </properties>
@@ -107,7 +107,7 @@ SPDX-License-Identifier: EPL-2.0
               <version>${tycho-version}</version>
             </dependency>
             <dependency>
-              <groupId>org.eclipse.tycho.extras</groupId>
+              <groupId>org.eclipse.tycho</groupId>
               <artifactId>tycho-buildtimestamp-jgit</artifactId>
               <version>${tycho-version}</version>
             </dependency>
@@ -168,33 +168,13 @@ SPDX-License-Identifier: EPL-2.0
             </configuration>
           </plugin>
         <plugin>
-          <groupId>org.eclipse.tycho</groupId>
-          <artifactId>tycho-source-plugin</artifactId>
-          <version>${tycho-version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.eclipse.tycho.extras</groupId>
-          <artifactId>tycho-pack200a-plugin</artifactId>
-          <version>${tycho-version}</version>
-        </plugin>
-        <plugin>
           <groupId>org.eclipse.cbi.maven.plugins</groupId>
           <artifactId>eclipse-jarsigner-plugin</artifactId>
           <version>${jarsigner-version}</version>
         </plugin>
         <plugin>
-          <groupId>org.eclipse.tycho.extras</groupId>
-          <artifactId>tycho-pack200b-plugin</artifactId>
-          <version>${tycho-version}</version>
-        </plugin>
-        <plugin>
           <groupId>org.eclipse.tycho</groupId>
           <artifactId>tycho-p2-plugin</artifactId>
-          <version>${tycho-version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.eclipse.tycho.extras</groupId>
-          <artifactId>tycho-source-feature-plugin</artifactId>
           <version>${tycho-version}</version>
         </plugin>
       </plugins>
