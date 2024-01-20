@@ -44,22 +44,22 @@ def java17Adoptium = [
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9.1/OpenJDK17U-jdk_x64_windows_hotspot_17.0.9_9.zip
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10+7/OpenJDK17U-jdk_x64_windows_hotspot_17.0.10_7.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9/OpenJDK17U-jdk_x64_mac_hotspot_17.0.9_9.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10+7/OpenJDK17U-jdk_x64_mac_hotspot_17.0.10_7.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.9_9.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10+7/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.10_7.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9/OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10+7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.10_7.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.9_9.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10+7/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.10_7.tar.gz
     ''',
   JDK_URLS_LINUX_PPC64LE: '''
-    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.9_9.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10+7/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.10_7.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
@@ -548,7 +548,7 @@ pipeline {
               if [[ $BUILD_TYPE == 'release' ]]; then
                 extra_argument='-DMAVEN_BUILD=false'
               fi
-              mvn --no-transfer-progress $promotion_argument $extra_argument -Dorg.eclipse.justj.p2.manager.extra.args="-super $PUBLISH_LOCATION_PREFIX" -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
+              mvn --no-transfer-progress $promotion_argument $extra_argument -Dtycho-version=3.0.5 -Dorg.eclipse.justj.p2.manager.extra.args="-super $PUBLISH_LOCATION_PREFIX" -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
               '''
             script {
               if (params.BUILD_TYPE != 'release') {
