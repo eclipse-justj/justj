@@ -548,7 +548,7 @@ pipeline {
               if [[ $BUILD_TYPE == 'release' ]]; then
                 extra_argument='-DMAVEN_BUILD=false'
               fi
-              mvn --no-transfer-progress $promotion_argument $extra_argument -Dtycho-version=3.0.5 -Dorg.eclipse.justj.p2.manager.extra.args="-super $PUBLISH_LOCATION_PREFIX" -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
+              mvn --no-transfer-progress $promotion_argument $extra_argument -Dorg.eclipse.justj.p2.manager.extra.args="-super $PUBLISH_LOCATION_PREFIX" -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
               '''
             script {
               if (params.BUILD_TYPE != 'release') {
