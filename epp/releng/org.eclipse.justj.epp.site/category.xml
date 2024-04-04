@@ -18,5 +18,5 @@ SPDX-License-Identifier: EPL-2.0
          %categoryDescription
       </description>
    </category-def>
-   <repository-reference location="https://download.eclipse.org/justj/jres/17/updates/release/latest" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/justj/jres/21/updates/release/latest" enabled="true" />
 </site>
