@@ -297,6 +297,7 @@ pipeline {
             env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(basename $(dirname $(dirname $(dirname $JUSTJ_MANIFEST_URL))))').trim()
             env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
           }
+          echo updateBuildDescription()
         }
       }
     }
@@ -475,6 +476,8 @@ pipeline {
           env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(for i in org.eclipse.justj.*.tar.gz; do tar -xOzf $i org.eclipse.justj.properties | grep "java.version=" | sed "s/^java.version=//g; s/[^0-9].*$//g"; done | sort -u)').trim()
           env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
           env.JUSTJ_JRE_PUBLISH_LOCATION = "${env.JUSTJ_PUBLISH_LOCATION}/downloads/${env.JUSTJ_BUILD_TIME_STAMP}"
+
+          updateBuildDescription()
         }
 
         sh '''
@@ -662,4 +665,14 @@ def parambuild(arguments) {
 
 def encode(string) {
   return string.replace("\r", "").replaceAll("^\n", "").replaceAll("\\s+\$", "").stripIndent().replace("\r", "").replace("%", "%25").replace("&", "%26").replace("\n", "%0A").replace("+", "%2B").replace(" ", "+")
+}
+
+def updateBuildDescription() {
+  def description = """
+BUILD_DESCRIPTION=${params.BUILD_DESCRIPTION}
+BUILD_TYPE=${params.BUILD_TYPE}
+JAVA_MAJOR_VERSION=${env.JAVA_MAJOR_VERSION}
+""".trim()
+  currentBuild.description = description.replace("\n", "<br/>")
+  return description
 }
