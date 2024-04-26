@@ -155,7 +155,7 @@ pipeline {
     JUSTJ_STORAGE_LOCATION = '/home/data/httpd/download.eclipse.org/justj'
   }
 
-  properties {
+  options {
     durabilityHint('MAX_SURVIVABILITY')
   }
 
