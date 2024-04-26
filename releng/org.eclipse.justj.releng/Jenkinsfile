@@ -295,6 +295,7 @@ pipeline {
           env.PROMOTE = params.PROMOTE
           if (params.JUSTJ_MANIFEST_URL != '') {
             env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(basename $(dirname $(dirname $(dirname $JUSTJ_MANIFEST_URL))))').trim()
+            env.JAVA_VERSION = env.JAVA_MAJOR_VERSION
             env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
           }
           echo updateBuildDescription()
@@ -474,6 +475,7 @@ pipeline {
 
           // Look for the java.version property in each JRE's properties file, extract out just the major version, and boil those down to unique values.
           env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(for i in org.eclipse.justj.*.tar.gz; do tar -xOzf $i org.eclipse.justj.properties | grep "java.version=" | sed "s/^java.version=//g; s/[^0-9].*$//g"; done | sort -u)').trim()
+          env.JAVA_VERSION = sh(returnStdout: true, script: 'echo $(for i in org.eclipse.justj.*.tar.gz; do tar -xOzf $i org.eclipse.justj.properties | grep "java.version=" | sed "s/^java.version=//g; s/[^0-9.].*$//g"; done | sort -u)').trim()
           env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
           env.JUSTJ_JRE_PUBLISH_LOCATION = "${env.JUSTJ_PUBLISH_LOCATION}/downloads/${env.JUSTJ_BUILD_TIME_STAMP}"
 
@@ -671,7 +673,7 @@ def updateBuildDescription() {
   def description = """
 BUILD_DESCRIPTION=${params.BUILD_DESCRIPTION}
 BUILD_TYPE=${params.BUILD_TYPE}
-JAVA_MAJOR_VERSION=${env.JAVA_MAJOR_VERSION}
+JAVA_VERSION=${env.JAVA_VERSION}
 """.trim()
   currentBuild.description = description.replace("\n", "<br/>")
   return description
