@@ -141,6 +141,7 @@ pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '10'))
     disableConcurrentBuilds()
+    durabilityHint('MAX_SURVIVABILITY')
   }
 
   tools {
@@ -153,10 +154,6 @@ pipeline {
     JUSTJ_BUILD_TIME_STAMP = sh(returnStdout: true, script: 'date +%Y%m%d_%H%M').trim()
     JUSTJ_URL = "${justjURL}"
     JUSTJ_STORAGE_LOCATION = '/home/data/httpd/download.eclipse.org/justj'
-  }
-
-  options {
-    durabilityHint('MAX_SURVIVABILITY')
   }
 
   parameters {
