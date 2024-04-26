@@ -13,7 +13,7 @@ def defaultPrefix = "jres"
 
 def java11Adoptium = [
   label: 'Java 11 (Adoptium)',
-  BUILD_DESCRIPTION: 'Build Adoptium Java 11',
+  BUILD_DESCRIPTION: 'Adoptium Java 11.0.23+9',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
@@ -40,7 +40,7 @@ def java11Adoptium = [
 
 def java17Adoptium = [
   label: 'Java 17 (Adoptium)',
-  BUILD_DESCRIPTION: 'Build Adoptium Java 17',
+  BUILD_DESCRIPTION: 'Adoptium Java 17.0.11+9',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
@@ -67,7 +67,7 @@ def java17Adoptium = [
 
 def java21Adoptium = [
   label: 'Java 21 (Adoptium)',
-  BUILD_DESCRIPTION: 'Build Adoptium Java 21',
+  BUILD_DESCRIPTION: 'Adoptium Java 21.0.3+9',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/21/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
@@ -94,7 +94,7 @@ def java21Adoptium = [
 
 def java22Adoptium = [
   label: 'Java 22 (Adoptium)',
-  BUILD_DESCRIPTION: 'Build Adoptium Java 22',
+  BUILD_DESCRIPTION: 'Adoptium Java 22.0.1+8',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/22/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
@@ -295,7 +295,6 @@ pipeline {
           env.PROMOTE = params.PROMOTE
           if (params.JUSTJ_MANIFEST_URL != '') {
             env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(basename $(dirname $(dirname $(dirname $JUSTJ_MANIFEST_URL))))').trim()
-            env.JAVA_VERSION = env.JAVA_MAJOR_VERSION
             env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
           }
           echo updateBuildDescription()
@@ -475,11 +474,8 @@ pipeline {
 
           // Look for the java.version property in each JRE's properties file, extract out just the major version, and boil those down to unique values.
           env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(for i in org.eclipse.justj.*.tar.gz; do tar -xOzf $i org.eclipse.justj.properties | grep "java.version=" | sed "s/^java.version=//g; s/[^0-9].*$//g"; done | sort -u)').trim()
-          env.JAVA_VERSION = sh(returnStdout: true, script: 'echo $(for i in org.eclipse.justj.*.tar.gz; do tar -xOzf $i org.eclipse.justj.properties | grep "java.version=" | sed "s/^java.version=//g; s/[^0-9.].*$//g"; done | sort -u)').trim()
           env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
           env.JUSTJ_JRE_PUBLISH_LOCATION = "${env.JUSTJ_PUBLISH_LOCATION}/downloads/${env.JUSTJ_BUILD_TIME_STAMP}"
-
-          updateBuildDescription()
         }
 
         sh '''
@@ -673,7 +669,6 @@ def updateBuildDescription() {
   def description = """
 BUILD_DESCRIPTION=${params.BUILD_DESCRIPTION}
 BUILD_TYPE=${params.BUILD_TYPE}
-JAVA_VERSION=${env.JAVA_VERSION}
 """.trim()
   currentBuild.description = description.replace("\n", "<br/>")
   return description
