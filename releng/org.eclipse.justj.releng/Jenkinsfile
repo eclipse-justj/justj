@@ -128,11 +128,7 @@ def parambuilds = [
   java22Adoptium,
 ]
 
-def javaDefault = update(java17Adoptium, [
-    BUILD_DESCRIPTION: 'Build Adoptium Java 17',
-    PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
-    JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/17/downloads/latest/justj.manifest"
-  ])
+def javaDefault = java17Adoptium
 
 // Use declarative syntax to run commands inside a Groovy sand-box container.
 pipeline {
