@@ -39,6 +39,11 @@ pipeline {
         echo "BUILD_TYPE=${params.BUILD_TYPE}"
         echo "PROMOTE=${params.PROMOTE}"
         script {
+          def description = """
+BUILD_TYPE=${params.BUILD_TYPE}
+PROMOTE=${params.PROMOTE}
+""".trim()
+          currentBuild.description = description.replace("\n", "<br/>")
           env.PROMOTE = params.PROMOTE
           env.BUILD_TYPE = params.BUILD_TYPE
         }
