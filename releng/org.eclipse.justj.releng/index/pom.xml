@@ -52,11 +52,11 @@ SPDX-License-Identifier: EPL-2.0
       </plugin>
 
       <plugin>
-        <groupId>org.eclipse.tycho.extras</groupId>
-        <artifactId>tycho-eclipserun-plugin</artifactId>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-eclipse-plugin</artifactId>
         <version>${tycho-version}</version>
         <configuration>
-          <executionEnvironment>JavaSE-17</executionEnvironment>
+          <executionEnvironment>JavaSE-21</executionEnvironment>
           <dependencies>
             <dependency>
               <artifactId>org.eclipse.justj.codegen</artifactId>
