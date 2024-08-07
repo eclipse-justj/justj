@@ -7,4 +7,4 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.justj.epp
-Require-Bundle: org.eclipse.justj.openjdk.hotspot.jre.full;bundle-version="[21.0.2.v20240123-0840,22.0.0)"
+Require-Bundle: org.eclipse.justj.openjdk.hotspot.jre.full;bundle-version="[21.0.4.v20240802-1551,22.0.0)"
