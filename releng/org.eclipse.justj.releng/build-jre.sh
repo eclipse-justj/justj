@@ -10,7 +10,7 @@ if [[ $OSTYPE == darwin* ]]; then
 
   if [[ "$ARCH" == "" ]]; then
     arch=x86_64
-  else 
+  else
     arch=$ARCH
   fi
 
@@ -130,7 +130,7 @@ if [[ "$urls" == "" ]]; then
     # https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_osx-x64_bin.tar.gz
     # https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_windows-x64_bin.zip
 
-    urls="https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2$jdk_suffix"
+    urls="https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.4+7/OpenJDK21U-jdk_x64_windows_hotspot_21.0.4_7.zip"
   fi
 fi
 
@@ -249,20 +249,35 @@ $eclipse_executable -application org.eclipse.ant.core.antRunner -nosplash -emacs
 java_version=$(grep "^java.version=" all.properties | sed 's/^.*=//;s/\r//')
 echo "Java Version '$java_version'"
 
+
+
+# Not all vendors support --generate-cds-archive
+# Also only Java version 22 or higher support it.
+generate_cds_archive=""
+
 # Compute the name prefix depending on the vendor and VM.
 if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
   vendor_url="https://adoptium.net/"
   if grep "OpenJ9" all.properties; then
     vendor_label="Adoptium J9"
     vendor_prefix="adoptium.j9"
+
   else
     vendor_label="Adoptium OpenJDK Hotspot"
     vendor_prefix="openjdk.hotspot"
+
+    if [[ $java_version =~ [2-9][0-9]+.[0-9]+.[0-9]+ ]]; then
+        generate_cds_archive="--generate-cds-archive"
+    fi
   fi
 else
   vendor_url="https://jdk.java.net/"
   vendor_label="OpenJDK Hotspot"
   vendor_prefix="openjdk.hotspot"
+
+    if [[ $java_version =~ [2-9][0-9]+.[0-9]+.[0-9]+ ]]; then
+        generate_cds_archive="--generate-cds-archive"
+    fi
 fi
 
 echo "Vendor prefix: $vendor_prefix-$java_version-$jre_suffix"
@@ -274,42 +289,42 @@ jres=(
   "JRE Base"
   "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings."
   java.base,java.logging,java.xml,jdk.unsupported,jdk.jdwp.agent
-  "--compress=2 --vm=server"
+  "--compress=2 --vm=server $generate_cds_archive"
   filter
 
 "$vendor_prefix.jre.base.stripped"
   "JRE Base Stripped"
   "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings, stripped of debug information."
   java.base,java.logging,java.xml,jdk.unsupported
-  "--compress=2 --vm=server $strip_debug"
+  "--compress=2 --vm=server $generate_cds_archive $strip_debug"
   false
 
 "$vendor_prefix.jre.full"
   "JRE Complete"
   "Provides the complete set of modules of the JDK, excluding incubators."
   $all_modules
-  "--compress=2 --vm=server"
+  "--compress=2 --vm=server $generate_cds_archive"
   true
 
 "$vendor_prefix.jre.full.stripped"
   "JRE Complete Stripped"
   "Provides the complete set of modules of the JDK, excluding incubators, stripped of debug information."
   $all_modules
-  "--compress=2 --vm=server $strip_debug"
+  "--compress=2 --vm=server $generate_cds_archive $strip_debug"
   false
 
 "$vendor_prefix.jre.minimal"
   "JRE Minimal"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release."
   $simrel_modules,jdk.jdwp.agent
-  "--compress=2 --vm=server"
+  "--compress=2 --vm=server $generate_cds_archive"
   filter
 
 "$vendor_prefix.jre.minimal.stripped"
   "JRE Minimal Stripped"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release, stripped of debug information."
   $simrel_modules
-  "--compress=2 --vm=server $strip_debug"
+  "--compress=2 --vm=server $generate_cds_archive $strip_debug"
   false
 
 )
