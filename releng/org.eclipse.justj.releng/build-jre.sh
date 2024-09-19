@@ -274,7 +274,7 @@ if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
     vendor_label="Adoptium OpenJDK Hotspot"
     vendor_prefix="openjdk.hotspot"
 
-    if [[ $java_version =~ $java_version =~ ^[2-9][0-9]+(.[0-9]+(.[0-9]+)?)?$ ]]; then
+    if [[ $java_version =~ ^[2-9][0-9]+(.[0-9]+(.[0-9]+)?)?$ ]]; then
         generate_cds_archive="--generate-cds-archive"
     fi
   fi
@@ -283,7 +283,7 @@ else
   vendor_label="OpenJDK Hotspot"
   vendor_prefix="openjdk.hotspot"
 
-    if [[ $java_version =~ $java_version =~ ^[2-9][0-9]+(.[0-9]+(.[0-9]+)?)?$ ]]; then
+    if [[ $java_version =~ ^[2-9][0-9]+(.[0-9]+(.[0-9]+)?)?$ ]]; then
         generate_cds_archive="--generate-cds-archive"
     fi
 fi
