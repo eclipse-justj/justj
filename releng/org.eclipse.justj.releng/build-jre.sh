@@ -85,6 +85,10 @@ else
     jdk_suffix="_linux-ppc64le_bin.tar.gz"
     eclipse_suffix="-linux-gtk-ppc64le.tar.gz"
     jre_suffix="linux-ppc64le"
+  elif [[ "$arch" == riscv64 ]]; then
+    jdk_suffix="_linux-riscv64_bin.tar.gz"
+    eclipse_suffix="-linux-gtk-riscv64.tar.gz"
+    jre_suffix="linux-riscv64"
   else
     jdk_suffix="_linux-x64_bin.tar.gz"
     eclipse_suffix="-linux-gtk-x86_64.tar.gz"
@@ -107,6 +111,10 @@ else
   elif [[ "$arch" == ppc64le ]]; then
     if [[ "$JDK_URLS_LINUX_PPC64LE" != "" && $# == 0 ]]; then
       urls=$JDK_URLS_LINUX_PPC64LE
+    fi
+  elif [[ "$arch" == riscv64 ]]; then
+    if [[ "$JDK_URLS_LINUX_RISCV64" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_LINUX_RISCV64
     fi
   else
     if [[ "$JDK_URLS_LINUX" != "" && $# == 0 ]]; then
