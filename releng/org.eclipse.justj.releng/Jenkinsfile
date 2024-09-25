@@ -382,7 +382,6 @@ pipeline {
           }
         }
 
-/*
         stage('Build Linux JREs RISCV64') {
           agent {
             label 'riscv64'
@@ -404,7 +403,6 @@ pipeline {
             stash includes: '*org.eclipse.justj.*.tar.gz', name: 'linux-riscv64-stash'
           }
         }
-*/
 
         stage('Build Windows JREs') {
           agent {
@@ -506,11 +504,9 @@ pipeline {
             unstash 'linux-ppc64le-stash'
           }
 
-/*
           if (env.JDK_URLS_LINUX_RISCV64 != '') {
             unstash 'linux-riscv64-stash'
           }
-*/
 
           if (env.JDK_URLS_LINUX_AARCH64 != '') {
             unstash 'linux-aarch64-stash'
