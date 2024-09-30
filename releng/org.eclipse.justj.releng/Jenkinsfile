@@ -387,6 +387,10 @@ pipeline {
             label 'riscv64'
           }
 
+          environment {
+            ECLIPSE_URL = 'https://download.eclipse.org/eclipse/downloads/drops4/I20240929-0810/eclipse-SDK-I20240929-0810-linux-gtk-riscv64.tar.gz'
+          }
+
           when {
             beforeAgent true
             not { environment name: 'JDK_URLS_LINUX_RISCV64', value: '' }
@@ -397,9 +401,11 @@ pipeline {
           steps {
             cleanWs()
             unstash 'releng-stash'
-            sh '''
-            releng/org.eclipse.justj.releng/build-jre.sh
-            '''
+            xvnc(useXauthority: true) {
+              sh '''
+              releng/org.eclipse.justj.releng/build-jre.sh
+              '''
+            }
             stash includes: '*org.eclipse.justj.*.tar.gz', name: 'linux-riscv64-stash'
           }
         }
