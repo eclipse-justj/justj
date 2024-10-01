@@ -389,6 +389,8 @@ pipeline {
 
           environment {
             ECLIPSE_URL = 'https://download.eclipse.org/eclipse/downloads/drops4/I20240929-0810/eclipse-SDK-I20240929-0810-linux-gtk-riscv64.tar.gz'
+            MESA_LOADER_DRIVER_OVERRIDE = 'iris'
+            LIBGL_ALWAYS_SOFTWARE = '1'
           }
 
           when {

@@ -179,7 +179,7 @@ if [ ! -d $jdk ]; then
   if [[ $os == win ]]; then
     unzip -q $file
   else
-    tar -xf $file
+    tar --warning=no-unknown-keyword -xf $file
   fi
 fi
 
@@ -203,7 +203,7 @@ if [ ! -d $eclipse_root ]; then
     hdiutil detach /Volumes/Eclipse
     xattr -rc Eclipse.app
   else
-    tar -xf $eclipse_file
+    tar --warning=no-unknown-keyword -xf $eclipse_file
   fi
 fi
 
@@ -251,7 +251,8 @@ user_dir="-Dunused=unused"
 [[ $os == mac ]] && user_dir="-Duser.dir=$PWD"
 
 # Capture all the system properties.
-$eclipse_executable -application org.eclipse.ant.core.antRunner -nosplash -emacs -vm "$jdk_vm_arg" -vmargs "$user_dir" > all.properties
+rm -rf ws
+$eclipse_executable -application org.eclipse.ant.core.antRunner -data ws -nosplash -emacs -vm "$jdk_vm_arg" -vmargs "$user_dir" > all.properties
 
 # Determine the Java version from the system properties.
 java_version=$(grep "^java.version=" all.properties | sed 's/^.*=//;s/\r//')
