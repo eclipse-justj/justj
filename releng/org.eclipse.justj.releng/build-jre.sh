@@ -179,7 +179,7 @@ if [ ! -d $jdk ]; then
   if [[ $os == win ]]; then
     unzip -q $file
   else
-    tar --warning=no-unknown-keyword -xf $file
+    tar -xf $file
   fi
 fi
 
@@ -203,7 +203,7 @@ if [ ! -d $eclipse_root ]; then
     hdiutil detach /Volumes/Eclipse
     xattr -rc Eclipse.app
   else
-    tar --warning=no-unknown-keyword -xf $eclipse_file
+    tar -xf $eclipse_file
   fi
 fi
 
@@ -388,7 +388,8 @@ for ((i=0; i<${#jres[@]}; i+=6)); do
   fi
 
   # Capture the interesting system properties.
-  $eclipse_executable -application org.eclipse.ant.core.antRunner -nosplash -emacs -vm "$jre_vm_arg"\
+  rm -rf ws
+  $eclipse_executable -data ws -application org.eclipse.ant.core.antRunner -nosplash -emacs -vm "$jre_vm_arg"\
       -vmargs "$user_dir" \
       -Dorg.eclipse.justj.vm.arg="$jre_relative_vm_arg" \
       -Dorg.eclipse.justj.name=$jre_name \
