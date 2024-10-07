@@ -258,7 +258,7 @@ pipeline {
 
    text(
       name: 'JDK_URLS_WINDOWS_AARCH64',
-      defaultValue: "${pretty(javaDefault.JDK_URLS_WINDOWS_AARCH64))}",
+      defaultValue: "${pretty(javaDefault.JDK_URLS_WINDOWS_AARCH64)}",
       description: 'One or more URLs to a Windows zip of a JDK for aarch64, e.g., from <a href="https://adoptium.net/" target="jdk">https://adoptium.net/</a> or <a href="https://jdk.java.net/" target="jdk">https://jdk.java.net/</a>.')
 
     text(
