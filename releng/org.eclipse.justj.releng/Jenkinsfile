@@ -439,7 +439,7 @@ pipeline {
           }
 
           environment {
-            ECLIPSE_URL = 'https://download.eclipse.org/eclipse/downloads/drops4/I20241006-1800/eclipse-SDK-I20241006-1800-linux-gtk-riscv64.tar.gz'
+            ECLIPSE_URL = 'https://download.eclipse.org/eclipse/downloads/drops4/I20241007-1800/eclipse-SDK-I20241007-1800-linux-gtk-riscv64.tar.gz'
             MESA_LOADER_DRIVER_OVERRIDE = 'iris'
             LIBGL_ALWAYS_SOFTWARE = '1'
           }
@@ -496,6 +496,7 @@ pipeline {
 
           environment {
             ARCH = 'aarch64'
+            ECLIPSE_URL = 'https://download.eclipse.org/eclipse/downloads/drops4/I20241007-1800/eclipse-SDK-I20241007-1800-win32-aarch64.zip'
           }
 
           when {
