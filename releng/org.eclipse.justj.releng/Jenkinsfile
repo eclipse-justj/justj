@@ -377,7 +377,7 @@ pipeline {
 
       parallel {
 
-        stage('Build Linux JREs') {
+        stage('Build Linux JREs x86_64') {
           when {
             not { environment name: 'JDK_URLS_LINUX', value: '' }
           }
@@ -465,7 +465,11 @@ pipeline {
 
         stage('Build Windows JREs x86_64') {
           agent {
-            label 'windows10'
+            label 'windows && x86_64'
+          }
+
+          environment {
+            ARCH = 'x86_64'
           }
 
           when {
@@ -487,7 +491,11 @@ pipeline {
 
         stage('Build Windows JREs Aarch64') {
           agent {
-            label 'windows11'
+            label 'windows && aarch64'
+          }
+
+          environment {
+            ARCH = 'aarch64'
           }
 
           when {
