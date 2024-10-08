@@ -70,8 +70,14 @@ elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
   eclipse_root="eclipse"
   eclipse_executable="eclipse/eclipsec.exe"
   unpack200_executable="unpack200.exe"
-  if [[ "$JDK_URLS_WINDOWS" != "" && $# == 0 ]]; then
-    urls=$JDK_URLS_WINDOWS
+  if [[ "$arch" == aarch64 ]]; then
+    if [[ "$JDK_URLS_WINDOWS_AARCH64" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_WINDOWS_AARCH64
+    fi
+  else
+    if [[ "$JDK_URLS_WINDOWS" != "" && $# == 0 ]]; then
+      urls=$JDK_URLS_WINDOWS
+    fi
   fi
 else
   os=linux
