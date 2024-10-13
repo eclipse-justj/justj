@@ -44,6 +44,7 @@ if [[ $OSTYPE == darwin* ]]; then
       urls=$JDK_URLS_MACOS
     fi
   fi
+  os_specific_simrel_modules=""
 elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
   os=win
 
@@ -79,6 +80,9 @@ elif [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
       urls=$JDK_URLS_WINDOWS
     fi
   fi
+  # This module is needed to support -Djavax.net.ssl.trustStoreType=Windows-ROOT
+  # It is added at the end of simrel_modules, hence it needs the comma separator.
+  os_specific_simrel_modules=",jdk.crypto.mscapi"
 else
   os=linux
 
@@ -127,6 +131,7 @@ else
       urls=$JDK_URLS_LINUX
     fi
   fi
+  os_specific_simrel_modules=""
 fi
 
 echo "Processing for os=$os"
@@ -216,7 +221,7 @@ fi
 # Remove the incubator modules.
 #
 all_modules=$($jdk/$jdk_relative_bin_folder/java --list-modules | sed "s/@.*//g" | grep -v "jdk.incubator" | tr '\n' ',' | sed 's/,$//')
-simrel_modules="java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.net.http,java.prefs,java.rmi,java.scripting,java.security.jgss,java.security.sasl,java.sql,java.sql.rowset,java.transaction.xa,java.xml,jdk.attach,jdk.crypto.ec,jdk.jdi,jdk.management,jdk.unsupported,jdk.xml.dom,jdk.zipfs,jdk.crypto.cryptoki,jdk.security.auth"
+simrel_modules="java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.net.http,java.prefs,java.rmi,java.scripting,java.security.jgss,java.security.sasl,java.sql,java.sql.rowset,java.transaction.xa,java.xml,jdk.attach,jdk.crypto.ec,jdk.jdi,jdk.management,jdk.unsupported,jdk.xml.dom,jdk.zipfs$os_specific_simrel_modules"
 installer_modules="java.base,java.desktop,java.logging,java.management,java.naming,java.prefs,java.security.jgss,java.sql,java.xml,jdk.xml.dom,jdk.unsupported"
 
 
