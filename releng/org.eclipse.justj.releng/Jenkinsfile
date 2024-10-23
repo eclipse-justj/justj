@@ -83,6 +83,7 @@ def java21Adoptium = [
     https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5+11/OpenJDK21U-jdk_x64_windows_hotspot_21.0.5_11.zip
     ''',
   JDK_URLS_WINDOWS_AARCH64: '''
+    https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5+11/OpenJDK21U-jdk_aarch64_windows_hotspot_21.0.5_11.zip
     ''',
   JDK_URLS_MACOS: '''
     https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5+11/OpenJDK21U-jdk_x64_mac_hotspot_21.0.5_11.tar.gz
