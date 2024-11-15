@@ -194,7 +194,7 @@ pipeline {
   agent { label 'centos-latest' }
 
   options {
-    buildDiscarder(logRotator(numToKeepStr: '10'))
+    buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '1'))))
     disableConcurrentBuilds()
     durabilityHint('MAX_SURVIVABILITY')
   }
