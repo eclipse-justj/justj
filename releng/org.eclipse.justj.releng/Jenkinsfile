@@ -309,6 +309,11 @@ pipeline {
       defaultValue: false,
       description: 'Whether to promote the p2 repository to the download server.'
     )
+    booleanParam(
+      name: 'ARCHIVE',
+      defaultValue: false,
+      description: 'Whether to archive the final p2 repositories.'
+    )
   }
 
   stages {
@@ -360,6 +365,7 @@ pipeline {
           env.JDK_URLS_LINUX_RISCV64 = pretty(params.JDK_URLS_LINUX_RISCV64)
           env.BUILD_TYPE = params.BUILD_TYPE
           env.PROMOTE = params.PROMOTE
+          env.ARCHIVE = params.ARCHIVE
           if (params.JUSTJ_MANIFEST_URL != '') {
             env.JAVA_MAJOR_VERSION = sh(returnStdout: true, script: 'echo $(basename $(dirname $(dirname $(dirname $JUSTJ_MANIFEST_URL))))').trim()
             env.JUSTJ_PUBLISH_LOCATION = "${env.PUBLISH_LOCATION_PREFIX}/${env.JAVA_MAJOR_VERSION}"
@@ -716,7 +722,7 @@ pipeline {
               mvn --no-transfer-progress $promotion_argument $extra_argument -Dorg.eclipse.justj.p2.manager.extra.args="-super $PUBLISH_LOCATION_PREFIX" -DPACK_AND_SIGN=true -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL -Dorg.eclipse.justj.p2.manager.relative=$JUSTJ_PUBLISH_LOCATION/updates -Dbuild.type=$BUILD_TYPE -Dgit.commit=$GIT_COMMIT -Dbuild.id=$BUILD_NUMBER clean verify
               '''
             script {
-              if (params.BUILD_TYPE != 'release') {
+              if (params.BUILD_TYPE != 'release' && params.ARCHIVE) {
                 dir('releng/org.eclipse.justj.site/target') {
                   archiveArtifacts 'repository/,org.eclipse.justj.site*.zip'
                 }
