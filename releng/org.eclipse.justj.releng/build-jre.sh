@@ -263,7 +263,7 @@ user_dir="-Dunused=unused"
 
 # Capture all the system properties.
 rm -rf ws
-$eclipse_executable -application org.eclipse.ant.core.antRunner -data ws -nosplash -emacs -vm "$jdk_vm_arg" -vmargs "$user_dir" $ECLIPSE_VM_ARGS > all.properties
+$eclipse_executable --launcher.suppressErrors -application org.eclipse.ant.core.antRunner -data ws -nosplash -emacs -vm "$jdk_vm_arg" -vmargs "$user_dir" $ECLIPSE_VM_ARGS > all.properties
 
 # Determine the Java version from the system properties.
 java_version=$(grep "^java.version=" all.properties | sed 's/^.*=//;s/\r//')
@@ -400,7 +400,7 @@ for ((i=0; i<${#jres[@]}; i+=6)); do
 
   # Capture the interesting system properties.
   rm -rf ws
-  $eclipse_executable -data ws -application org.eclipse.ant.core.antRunner -nosplash -emacs -vm "$jre_vm_arg"\
+  $eclipse_executable --launcher.suppressErrors -data ws -application org.eclipse.ant.core.antRunner -nosplash -emacs -vm "$jre_vm_arg"\
       -vmargs "$user_dir" \
       $ECLIPSE_VM_ARGS \
       -Dorg.eclipse.justj.vm.arg="$jre_relative_vm_arg" \
