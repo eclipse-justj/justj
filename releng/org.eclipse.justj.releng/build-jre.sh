@@ -268,11 +268,12 @@ $eclipse_executable --launcher.suppressErrors -application org.eclipse.ant.core.
 # Determine the Java version from the system properties.
 java_version=$(grep "^java.version=" all.properties | sed 's/^.*=//;s/\r//')
 echo "Java Version '$java_version'"
+java_major_version=${java_version%%.*}
 
 
 
 # Not all vendors support --generate-cds-archive
-# Also only Java version 22 or higher support it.
+# Also only Java version 21 or higher support it.
 generate_cds_archive=""
 
 # Compute the name prefix depending on the vendor and VM.
@@ -286,7 +287,7 @@ if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
     vendor_label="Adoptium OpenJDK Hotspot"
     vendor_prefix="openjdk.hotspot"
 
-    if [[ $java_version =~ ^[2-9][0-9]+(.[0-9]+(.[0-9]+)?)?$ ]]; then
+    if (($java_major_version >= 21)); then
         generate_cds_archive="--generate-cds-archive"
     fi
   fi
@@ -295,9 +296,9 @@ else
   vendor_label="OpenJDK Hotspot"
   vendor_prefix="openjdk.hotspot"
 
-    if [[ $java_version =~ ^[2-9][0-9]+(.[0-9]+(.[0-9]+)?)?$ ]]; then
-        generate_cds_archive="--generate-cds-archive"
-    fi
+  if (($java_major_version >= 21)); then
+    generate_cds_archive="--generate-cds-archive"
+  fi
 fi
 
 echo "Vendor prefix: $vendor_prefix-$java_version-$jre_suffix"
