@@ -180,10 +180,10 @@ if [ ! -f $eclipse_file ]; then
   curl -O -L -J $eclipse_url
 fi
 
-# Extract the JDK; the folder name is expected to start with jdk-.
+# Extract the JDK; the folder name is expected to start with jdk[1-9-].
 #
-rm -rf jdk-*
-jdk="jdk-*"
+rm -rf jdk[1-9-]*
+jdk="jdk[1-9-]*"
 if [ ! -d $jdk ]; then
   echo "Unpackaging $file"
   #rm -rf $jdk
@@ -196,7 +196,7 @@ fi
 
 # A sanity test that the JDK has been unpacked.
 #
-jdk=$(echo jdk-*)
+jdk=$(echo jdk[1-9-]*)
 echo "JDK Folder: $jdk"
 echo "JDK Version:"
 $jdk/$jdk_relative_bin_folder/java -version
@@ -278,26 +278,35 @@ generate_cds_archive=""
 
 # Compute the name prefix depending on the vendor and VM.
 if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
-  vendor_url="https://adoptium.net/"
-  if grep "OpenJ9" all.properties; then
-    vendor_label="Adoptium J9"
-    vendor_prefix="adoptium.j9"
-
-  else
-    vendor_label="Adoptium OpenJDK Hotspot"
-    vendor_prefix="openjdk.hotspot"
-
-    if (($java_major_version >= 21)); then
-        generate_cds_archive="--generate-cds-archive"
-    fi
-  fi
-else
-  vendor_url="https://jdk.java.net/"
-  vendor_label="OpenJDK Hotspot"
-  vendor_prefix="openjdk.hotspot"
+  vendor_url=${VENDOR_URL:-"https://adoptium.net/"}
+  vendor_label=${VENDOR_LABEL:-"Adoptium OpenJDK Hotspot"}
+  vendor_prefix=${VEDOR_PREFIX:-"openjdk.hotspot"}
 
   if (($java_major_version >= 21)); then
-    generate_cds_archive="--generate-cds-archive"
+    generate_cds_archive=${GENERATE_CDS_ARCHIVE:-"--generate-cds-archive"}
+  fi
+elif grep "^java.vm.name=" all.properties | grep -q "OpenJ9 "; then
+  vendor_url=${VENDOR_URL:-"https://www.ibm.com/semeru-runtimes/"}
+  vendor_label=${VENDOR_LABEL:-"OpenJDK J9"}
+  vendor_prefix=${VEDOR_PREFIX:-"openjdk.j9"}
+
+  # Does not support --generate-cds-archive support
+  generate_cds_archive=${GENERATE_CDS_ARCHIVE:-""}
+elif grep "^java.vendor.version=" all.properties | grep -q "Corretto"; then
+  vendor_url=${VENDOR_URL:-"https://aws.amazon.com/corretto/"}
+  vendor_label=${VENDOR_LABEL:-"Corretto OpenJDK Hotspot"}
+  vendor_prefix=${VEDOR_PREFIX:-"openjdk.hotspot"}
+
+  if (($java_major_version >= 21)); then
+    generate_cds_archive=${GENERATE_CDS_ARCHIVE:-"--generate-cds-archive"}
+  fi
+else
+  vendor_url=${VENDOR_URL:-"https://jdk.java.net/"}
+  vendor_label=${VENDOR_LABEL:-"OpenJDK Hotspot"}
+  vendor_prefix=${VEDOR_PREFIX:-"openjdk.hotspot"}
+
+  if (($java_major_version >= 21)); then
+    generate_cds_archive=${GENERATE_CDS_ARCHIVE:-"--generate-cds-archive"}
   fi
 fi
 
