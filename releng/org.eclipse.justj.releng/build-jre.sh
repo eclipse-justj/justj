@@ -180,13 +180,20 @@ if [ ! -f $eclipse_file ]; then
   curl -O -L -J $eclipse_url
 fi
 
-# Extract the JDK; the folder name is expected to start with jdk[1-9-].
+
+# Compute the root folder name from the contents archive.
 #
-rm -rf jdk[1-9-]*
-jdk="jdk[1-9-]*"
+if [[ $os == win ]]; then
+  jdk=$(unzip -qql $file | head -1 | sed 's/.* //;s%/%%')
+else
+  jdk=$(tar -ztf $file | head -1 | sed 's%/%%')
+fi
+
+# Extract the JDK.
+#
+rm -rf $jdk
 if [ ! -d $jdk ]; then
   echo "Unpackaging $file"
-  #rm -rf $jdk
   if [[ $os == win ]]; then
     unzip -q $file
   else
@@ -196,7 +203,6 @@ fi
 
 # A sanity test that the JDK has been unpacked.
 #
-jdk=$(echo jdk[1-9-]*)
 echo "JDK Folder: $jdk"
 echo "JDK Version:"
 $jdk/$jdk_relative_bin_folder/java -version
