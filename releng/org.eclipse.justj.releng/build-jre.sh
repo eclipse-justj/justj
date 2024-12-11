@@ -281,6 +281,7 @@ java_major_version=${java_version%%.*}
 # Not all vendors support --generate-cds-archive
 # Also only Java version 21 or higher support it.
 generate_cds_archive=""
+jlink_extra_args=""
 
 # Compute the name prefix depending on the vendor and VM.
 if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
@@ -290,6 +291,9 @@ if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
 
   if (($java_major_version >= 21)); then
     generate_cds_archive=${GENERATE_CDS_ARCHIVE:-"--generate-cds-archive"}
+  fi
+  if (($java_major_version == 24)); then
+    jlink_extra_args=${JLINK_EXTRA_ARGS:-"--ignore-modified-runtime"}
   fi
 elif grep "^java.vm.name=" all.properties | grep -q "OpenJ9 "; then
   vendor_url=${VENDOR_URL:-"https://www.ibm.com/semeru-runtimes/"}
@@ -325,42 +329,42 @@ jres=(
   "JRE Base"
   "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings."
   java.base,java.logging,java.xml,jdk.unsupported,jdk.jdwp.agent
-  "--compress=2 --vm=server $generate_cds_archive"
+  "--compress=2 --vm=server $generate_cds_archive $jlink_extra_args"
   filter
 
 "$vendor_prefix.jre.base.stripped"
   "JRE Base Stripped"
   "Provides the minimal modules needed to launch Equinox with logging and without reflection warnings, stripped of debug information."
   java.base,java.logging,java.xml,jdk.unsupported
-  "--compress=2 --vm=server $generate_cds_archive $strip_debug"
+  "--compress=2 --vm=server $generate_cds_archive $jlink_extra_args $strip_debug"
   false
 
 "$vendor_prefix.jre.full"
   "JRE Complete"
   "Provides the complete set of modules of the JDK, excluding incubators."
   $all_modules
-  "--compress=2 --vm=server $generate_cds_archive"
+  "--compress=2 --vm=server $generate_cds_archive $jlink_extra_args"
   true
 
 "$vendor_prefix.jre.full.stripped"
   "JRE Complete Stripped"
   "Provides the complete set of modules of the JDK, excluding incubators, stripped of debug information."
   $all_modules
-  "--compress=2 --vm=server $generate_cds_archive $strip_debug"
+  "--compress=2 --vm=server $generate_cds_archive $jlink_extra_args $strip_debug"
   false
 
 "$vendor_prefix.jre.minimal"
   "JRE Minimal"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release."
   $simrel_modules,jdk.jdwp.agent
-  "--compress=2 --vm=server $generate_cds_archive"
+  "--compress=2 --vm=server $generate_cds_archive $jlink_extra_args"
   filter
 
 "$vendor_prefix.jre.minimal.stripped"
   "JRE Minimal Stripped"
   "Provides the minimal modules needed to satisfy all of the bundles of the simultaneous release, stripped of debug information."
   $simrel_modules
-  "--compress=2 --vm=server $generate_cds_archive $strip_debug"
+  "--compress=2 --vm=server $generate_cds_archive $jlink_extra_args $strip_debug"
   false
 
 )
