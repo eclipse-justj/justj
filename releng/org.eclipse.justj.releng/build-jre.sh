@@ -186,7 +186,7 @@ fi
 if [[ $os == win ]]; then
   jdk=$(unzip -qql $file | head -1 | sed 's/.* //;s%/%%')
 else
-  jdk=$(tar -ztf $file | head -1 | sed 's%/%%')
+  jdk=$(tar -ztf $file | head -1 | sed 's%/.*%%')
 fi
 
 # Extract the JDK.
