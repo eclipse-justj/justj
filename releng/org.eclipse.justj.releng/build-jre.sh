@@ -292,9 +292,9 @@ if grep "^java.vendor.version=" all.properties | grep -q "Temurin"; then
   if (($java_major_version >= 21)); then
     generate_cds_archive=${GENERATE_CDS_ARCHIVE:-"--generate-cds-archive"}
   fi
-  if (($java_major_version == 24)); then
-    jlink_extra_args=${JLINK_EXTRA_ARGS:-"--ignore-modified-runtime"}
-  fi
+#  if (($java_major_version == 24)); then
+#    jlink_extra_args=${JLINK_EXTRA_ARGS:-"--ignore-modified-runtime"}
+#  fi
 elif grep "^java.vm.name=" all.properties | grep -q "OpenJ9 "; then
   vendor_url=${VENDOR_URL:-"https://www.ibm.com/semeru-runtimes/"}
   vendor_label=${VENDOR_LABEL:-"OpenJDK J9"}
