@@ -11,6 +11,6 @@
     </listAttribute>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${none}"/>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${maven.build.command}"/>
-    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dxjustj.tools.repo=${file_uri:${resource_loc:/org.eclipse.justj.tools.site}}/target/repository&#13;&#10;-Dorg.eclipse.justj.p2.manager.args=&quot;-remote localhost:${system_property:user.home}/justj-epp&quot;&#13;&#10;-Dgit.commit=cd7a25f00505455bfbedaafc62bd18d6c03d0930&#13;&#10;-Dbuild.id=local-build&#13;&#10;-Dbuild.type=nightly&#13;&#10;-DX&#13;&#10;clean&#13;&#10;verify"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dxjustj.tools.repo=${file_uri:${resource_loc:/org.eclipse.justj.tools.site}}/target/repository&#13;&#10;-Dorg.eclipse.justj.p2.manager.args=&quot;-remote localhost:${system_property:user.home}/justj-epp&quot;&#13;&#10;-Dgit.commit=cd7a25f00505455bfbedaafc62bd18d6c03d0930&#13;&#10;-Dbuild.id=local-build&#13;&#10;-Dbuild.type=nightly&#13;&#10;-DX&#13;&#10;-Duser.home=${system_property:user.home}&#13;&#10;clean&#13;&#10;verify"/>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${project_loc:/org.eclipse.justj.epp.site}/../.."/>
 </launchConfiguration>
