@@ -109,32 +109,32 @@ def java21Adoptium = [
 
 def java23Adoptium = [
   label: 'Java 23 (Adoptium)',
-  BUILD_DESCRIPTION: 'Adoptium Java 23.0.1+11',
+  BUILD_DESCRIPTION: 'Adoptium Java 23.0.2+7',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/23/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_x64_windows_hotspot_23.0.1_11.zip
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_x64_windows_hotspot_23.0.2_7.zip
     ''',
   JDK_URLS_WINDOWS_AARCH64: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_aarch64_windows_hotspot_23.0.1_11.zip
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_aarch64_windows_hotspot_23.0.2_7.zip
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_x64_mac_hotspot_23.0.1_11.tar.gz
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_x64_mac_hotspot_23.0.2_7.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_aarch64_mac_hotspot_23.0.1_11.tar.gz
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_aarch64_mac_hotspot_23.0.2_7.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_x64_linux_hotspot_23.0.1_11.tar.gz
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_x64_linux_hotspot_23.0.2_7.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_aarch64_linux_hotspot_23.0.1_11.tar.gz
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_aarch64_linux_hotspot_23.0.2_7.tar.gz
     ''',
   JDK_URLS_LINUX_PPC64LE: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_ppc64le_linux_hotspot_23.0.1_11.tar.gz
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_ppc64le_linux_hotspot_23.0.2_7.tar.gz
     ''',
   JDK_URLS_LINUX_RISCV64: '''
-    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.1+11/OpenJDK23U-jdk_riscv64_linux_hotspot_23.0.1_11.tar.gz
+    https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23.0.2+7/OpenJDK23U-jdk_riscv64_linux_hotspot_23.0.2_7.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
