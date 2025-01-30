@@ -15,4 +15,5 @@
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="org.eclipse.justj.codegen"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="${resource_loc:/org.eclipse.justj.releng/Jenkinsfile}"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.justj.codegen"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Duser.home=${system_property:user.home}"/>
 </launchConfiguration>
