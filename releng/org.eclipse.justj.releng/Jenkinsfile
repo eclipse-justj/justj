@@ -178,7 +178,7 @@ def java25Adoptium = [
 
 def java26Adoptium = [
   label: 'Java 26 (Adoptium) Early Access Beta',
-  BUILD_DESCRIPTION: 'Adoptium Java 26+13',
+  BUILD_DESCRIPTION: 'Adoptium Java 26+12',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/26/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
@@ -203,7 +203,7 @@ def java26Adoptium = [
     https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26+12-ea-beta/OpenJDK-jdk_ppc64le_linux_hotspot_26_12-ea.tar.gz
     ''',
   JDK_URLS_LINUX_RISCV64: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26+12-ea-beta/OpenJDK-jdk_riscv64_linux_hotspot_26_13-ea.tar.gz
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26+12-ea-beta/OpenJDK-jdk_riscv64_linux_hotspot_26_12-ea.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
