@@ -23,7 +23,7 @@ SPDX-License-Identifier: EPL-2.0
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tycho.scmUrl>scm:git:https://github.com/eclipse-justj/justj.git</tycho.scmUrl>
-    <tycho-version>4.0.13</tycho-version>
+    <tycho-version>5.0.0</tycho-version>
     <jarsigner-version>1.5.2</jarsigner-version>
     <os-jvm-flags/>
   </properties>
