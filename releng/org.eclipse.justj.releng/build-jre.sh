@@ -431,7 +431,7 @@ for ((i=0; i<${#jres[@]}; i+=6)); do
       -Dorg.eclipse.justj.jlink.args="$jlink_args" \
       -Dorg.eclipse.justj.url.vendor="$vendor_url" \
       -Dorg.eclipse.justj.url.source="$url" |
-    grep -E "^org.eclipse.just|^java.class.version|^java.runtime|^java.specification|^java.vendor|^java.version|^java.vm|^org.osgi.framework.system.capabilities|^org.osgi.framework.system.packages|^org.osgi.framework.version|^osgi.arch|^osgi.ws|^osgi.os" |
+    grep -E "^org.eclipse.just|^java.class.version|^java.runtime|^java.specification|^java.vendor|^java.version|^java.vm|^org.osgi.framework.system.capabilities|^org.osgi.framework.system.packages|^org.osgi.framework.version|^osgi.arch|^osgi.ws|^osgi.os|^os.name|^os.arch|^os.version" |
     sort > $jre_folder/org.eclipse.justj.properties
 
   # Package up the results without the folder name.
