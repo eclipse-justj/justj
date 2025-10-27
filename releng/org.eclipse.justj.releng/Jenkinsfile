@@ -651,14 +651,15 @@ pipeline {
 
         sh 'ls org.eclipse.justj.*.tar.gz > justj.manifest'
 
+        archiveArtifacts 'org.eclipse.justj.*.tar.gz'
+        archiveArtifacts 'justj.manifest'
+
         dir('releng/org.eclipse.justj.releng/index') {
           sh '''
             mvn --no-transfer-progress -Djustj.manifest.location=../../../justj.manifest -Djustj.manifest.url=$JUSTJ_URL/$JUSTJ_JRE_PUBLISH_LOCATION/justj.manifest clean verify
             '''
         }
 
-        archiveArtifacts 'org.eclipse.justj.*.tar.gz'
-        archiveArtifacts 'justj.manifest'
         archiveArtifacts 'index.html'
 
         sshagent(['projects-storage.eclipse.org-bot-ssh']) {
