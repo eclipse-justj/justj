@@ -217,6 +217,7 @@ def parambuilds = [
   java21Adoptium,
   java25Adoptium,
   java26Adoptium,
+  java27Adoptium,
 ]
 
 def javaDefault = java21Adoptium
