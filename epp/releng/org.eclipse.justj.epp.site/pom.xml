@@ -35,6 +35,8 @@ SPDX-License-Identifier: EPL-2.0
         <version>${tycho-version}</version>
         <configuration>
           <repositoryName>JustJ Build ${build.id}</repositoryName>
+          <skipArchive>true</skipArchive>
+          <xzCompress>false</xzCompress>
         </configuration>
       </plugin>
       <plugin>
