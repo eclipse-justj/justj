@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.justj.epp;singleton:=true
-Bundle-Version: 21.0.0.qualifier
+Bundle-Version: 25.0.3.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.justj.epp
-Require-Bundle: org.eclipse.justj.openjdk.hotspot.jre.full;bundle-version="[21.0.11.v20260515-1531,22.0.0)"
+Require-Bundle: org.eclipse.justj.openjdk.hotspot.jre.full;bundle-version="[25.0.3.v20260502-0818,26.0.0)"
