@@ -166,6 +166,10 @@ public class Updater
       apply(file, "Require-Bundle: " + JRE_ID + ";bundle-version=\"([^\"]+)\"", "[" + jreVersion + "," + nextJREVersion + ")");
       apply(file, "Bundle-Version: ([0-9.]+).qualifier", version);
     }
+    else if (fileName.equals("category.xml"))
+    {
+      apply(file, "<repository-reference location=\"https://download.eclipse.org/justj/jres/([0-9]+)/updates/release/latest\"", jreMajorVersion);
+    }
   }
 
   private void update() throws IOException
