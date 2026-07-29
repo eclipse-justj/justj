@@ -24,7 +24,7 @@ SPDX-License-Identifier: EPL-2.0
 
   <groupId>org.eclipse.justj</groupId>
   <artifactId>org.eclipse.justj.epp</artifactId>
-  <version>25.0.3-SNAPSHOT</version>
+  <version>25.0.4-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 
   <build>
