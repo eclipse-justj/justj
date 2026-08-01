@@ -20,7 +20,6 @@ def java11Adoptium = [
     https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_x64_windows_hotspot_11.0.32_9.zip
     ''',
   JDK_URLS_WINDOWS_AARCH64: '''
-    https://aka.ms/download-jdk/microsoft-jdk-11.0.32-windows-aarch64.zip
     ''',
   JDK_URLS_MACOS: '''
     https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_x64_mac_hotspot_11.0.32_9.tar.gz
