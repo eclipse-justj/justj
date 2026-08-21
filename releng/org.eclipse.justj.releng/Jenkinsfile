@@ -257,9 +257,8 @@ def parambuilds = [
 
 def javaDefault = java25Adoptium
 
-// Use declarative syntax to run commands inside a Groovy sand-box container.
 pipeline {
-  agent { label 'ubuntu-latest' }
+  agent { label 'centos-latest' }
 
   options {
     buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '1'))
