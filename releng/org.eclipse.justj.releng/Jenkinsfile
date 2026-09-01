@@ -13,28 +13,28 @@ def defaultPrefix = "jres"
 
 def java11Adoptium = [
   label: 'Java 11 (Adoptium)',
-  BUILD_DESCRIPTION: 'Adoptium Java 11.0.32+9',
+  BUILD_DESCRIPTION: 'Adoptium Java 11.0.32.1+1',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_x64_windows_hotspot_11.0.32_9.zip
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1+1/OpenJDK11U-jdk_x64_windows_hotspot_11.0.32.1_1.zip
     ''',
   JDK_URLS_WINDOWS_AARCH64: '''
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_x64_mac_hotspot_11.0.32_9.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1+1/OpenJDK11U-jdk_x64_mac_hotspot_11.0.32.1_1.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_aarch64_mac_hotspot_11.0.32_9.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1+1/OpenJDK11U-jdk_aarch64_mac_hotspot_11.0.32.1_1.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.32_9.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1+1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.32.1_1.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.32_9.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1+1/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.32.1_1.tar.gz
     ''',
   JDK_URLS_LINUX_PPC64LE: '''
-    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32+9/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.32_9.tar.gz
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1+1/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.32.1_1.tar.gz
     ''',
   JDK_URLS_LINUX_RISCV64: '''
     ''',
@@ -143,31 +143,31 @@ def java25Adoptium = [
 
 def java26Adoptium = [
   label: 'Java 26 (Adoptium)',
-  BUILD_DESCRIPTION: 'Adoptium Java 26.0.2+10',
+  BUILD_DESCRIPTION: 'Adoptium Java 26.0.2.1+1',
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/26/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2+10/OpenJDK26U-jdk_x64_windows_hotspot_26.0.2_10.zip
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1+1/OpenJDK26U-jdk_x64_windows_hotspot_26.0.2.1_1.zip
     ''',
   JDK_URLS_WINDOWS_AARCH64: '''
     ''',
   JDK_URLS_MACOS: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2+10/OpenJDK26U-jdk_x64_mac_hotspot_26.0.2_10.tar.gz
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1+1/OpenJDK26U-jdk_x64_mac_hotspot_26.0.2.1_1.tar.gz
     ''',
   JDK_URLS_MACOS_AARCH64: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2+10/OpenJDK26U-jdk_aarch64_mac_hotspot_26.0.2_10.tar.gz
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1+1/OpenJDK26U-jdk_aarch64_mac_hotspot_26.0.2.1_1.tar.gz
     ''',
   JDK_URLS_LINUX: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2+10/OpenJDK26U-jdk_x64_linux_hotspot_26.0.2_10.tar.gz
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1+1/OpenJDK26U-jdk_x64_linux_hotspot_26.0.2.1_1.tar.gz
     ''',
   JDK_URLS_LINUX_AARCH64: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2+10/OpenJDK26U-jdk_aarch64_linux_hotspot_26.0.2_10.tar.gz
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1+1/OpenJDK26U-jdk_aarch64_linux_hotspot_26.0.2.1_1.tar.gz
     ''',
   JDK_URLS_LINUX_PPC64LE: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2+10/OpenJDK26U-jdk_ppc64le_linux_hotspot_26.0.2_10.tar.gz
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1+1/OpenJDK26U-jdk_ppc64le_linux_hotspot_26.0.2.1_1.tar.gz
     ''',
   JDK_URLS_LINUX_RISCV64: '''
-    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2+10/OpenJDK26U-jdk_riscv64_linux_hotspot_26.0.2_10.tar.gz
+    https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1+1/OpenJDK26U-jdk_riscv64_linux_hotspot_26.0.2.1_1.tar.gz
     ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
