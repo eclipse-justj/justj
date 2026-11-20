@@ -683,8 +683,12 @@ pipeline {
 
         sh 'ls org.eclipse.justj.*.tar.gz > justj.manifest'
 
-        archiveArtifacts 'org.eclipse.justj.*.tar.gz'
-        archiveArtifacts 'justj.manifest'
+        script {
+          if (params.ARCHIVE) {
+            archiveArtifacts 'org.eclipse.justj.*.tar.gz'
+            archiveArtifacts 'justj.manifest'
+          }
+        }
 
         dir('releng/org.eclipse.justj.releng/index') {
           sh '''
@@ -692,7 +696,11 @@ pipeline {
             '''
         }
 
-        archiveArtifacts 'index.html'
+        script {
+          if (params.ARCHIVE) {
+            archiveArtifacts 'index.html'
+          }
+        }
 
         sshagent(['projects-storage.eclipse.org-bot-ssh']) {
           sh '''
@@ -733,7 +741,11 @@ pipeline {
             mv justj-transformed.jregen justj.jregen
             mvn --no-transfer-progress clean verify
           '''
-          archiveArtifacts 'justj.jregen,*-gen/'
+          script {
+            if (params.ARCHIVE) {
+              archiveArtifacts 'justj.jregen,*-gen/'
+            }
+          }
         }
       }
     }
