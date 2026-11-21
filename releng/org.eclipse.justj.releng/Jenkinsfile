@@ -66,7 +66,8 @@ def java17Adoptium = [
     https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21.1+2/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.21.1_2.tar.gz
     ''',
   JDK_URLS_LINUX_RISCV64: '''
-    ''', // https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21+9/OpenJDK17U-jdk_riscv64_linux_hotspot_17.0.21_9.tar.gz
+    https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21.1+2/OpenJDK17U-jdk_riscv64_linux_hotspot_17.0.21.1_2.tar.gz
+    ''',
   BUILD_TYPE: 'nightly',
   PROMOTE: 'true'
 ]
