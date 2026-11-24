@@ -35,7 +35,7 @@ import java.util.zip.ZipInputStream;
 
 public class Updater
 {
-  private static final String JUSTJ_JRES_URL = "https://download.eclipse.org/justj/jres/25/updates/release/25.0.5";
+  private static final String JUSTJ_JRES_URL = "https://download.eclipse.org/justj/jres/25/updates/release/25.0.5.v20261124-1128";
 
   private static final String COPYRIGHT_YEAR = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
 
