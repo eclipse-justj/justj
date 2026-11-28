@@ -17,7 +17,8 @@ def java11Adoptium = [
   PUBLISH_LOCATION_PREFIX: "${defaultPrefix}",
   JUSTJ_MANIFEST_URL: "${justjURL}/${defaultPrefix}/11/downloads/latest/justj.manifest",
   JDK_URLS_WINDOWS: '''
-    ''', // https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.33+10/OpenJDK11U-jdk_x64_windows_hotspot_11.0.33_10.zip
+    https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.33.1+1/OpenJDK11U-jdk_x64_windows_hotspot_11.0.33.1_1.zip
+    ''',
   JDK_URLS_WINDOWS_AARCH64: '''
     ''',
   JDK_URLS_MACOS: '''
